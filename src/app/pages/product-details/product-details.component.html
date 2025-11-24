@@ -1,3 +1,130 @@
-<div class="container">
-  <h1>Product Details</h1>
+<div class="product-details-page" *ngIf="product">
+  <div class="container">
+    <nav class="breadcrumb">
+      <a routerLink="/home">Home</a>
+      <span>></span>
+      <a routerLink="/products">Products</a>
+      <span>></span>
+      <a [routerLink]="['/products']" [queryParams]="{category: product.category}">{{ product.category | titlecase }}</a>
+      <span>></span>
+      <span class="current">{{ product.name }}</span>
+    </nav>
+
+    <div class="product-details">
+      <div class="product-gallery">
+        <div class="main-image">
+          <img [src]="product.image" [alt]="product.name">
+        </div>
+      </div>
+
+      <div class="product-info">
+        <div class="category-badge">{{ product.category | titlecase }}</div>
+        <h1>{{ product.name }}</h1>
+        <div class="price">{{ product.price }} TND</div>
+        
+        <div class="stock-status">
+          <mat-icon [class.in-stock]="product.inStock" [class.out-of-stock]="!product.inStock">
+            {{ product.inStock ? 'check_circle' : 'cancel' }}
+          </mat-icon>
+          <span>{{ product.inStock ? 'In Stock' : 'Out of Stock' }}</span>
+        </div>
+
+        <p class="description">{{ product.description }}</p>
+
+        <div class="quantity-selector">
+          <label>Quantity:</label>
+          <div class="quantity-controls">
+            <button mat-icon-button (click)="decreaseQuantity()" [disabled]="quantity <= 1">
+              <mat-icon>remove</mat-icon>
+            </button>
+            <span class="quantity">{{ quantity }}</span>
+            <button mat-icon-button (click)="increaseQuantity()">
+              <mat-icon>add</mat-icon>
+            </button>
+          </div>
+        </div>
+
+        <div class="action-buttons">
+          <button mat-raised-button color="primary" class="add-to-cart" 
+                  (click)="addToCart()" [disabled]="!product.inStock">
+            <mat-icon>add_shopping_cart</mat-icon>
+            Add to Cart
+          </button>
+          <button mat-raised-button color="accent" class="buy-now" 
+                  (click)="buyNow()" [disabled]="!product.inStock">
+            <mat-icon>flash_on</mat-icon>
+            Buy Now
+          </button>
+        </div>
+
+        <div class="product-features">
+          <div class="feature">
+            <mat-icon>local_shipping</mat-icon>
+            <span>Free Shipping</span>
+          </div>
+          <div class="feature">
+            <mat-icon>assignment_return</mat-icon>
+            <span>30-Day Returns</span>
+          </div>
+          <div class="feature">
+            <mat-icon>security</mat-icon>
+            <span>2-Year Warranty</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <mat-tab-group class="product-tabs">
+      <mat-tab label="Description">
+        <div class="tab-content">
+          <h3>Product Details</h3>
+          <p>{{ product.description }}</p>
+          <p>This beautiful accessory is crafted with attention to detail and made from high-quality materials to ensure longevity and satisfaction.</p>
+          
+          <h4>Features:</h4>
+          <ul>
+            <li>Premium quality materials</li>
+            <li>Expert craftsmanship</li>
+            <li>Elegant design suitable for various occasions</li>
+            <li>Comfortable to wear all day</li>
+          </ul>
+        </div>
+      </mat-tab>
+      
+      <mat-tab label="Shipping & Returns">
+        <div class="tab-content">
+          <h3>Shipping Information</h3>
+          <p>We offer free standard shipping on all orders. Orders are processed within 1-2 business days and delivered within 3-5 business days.</p>
+          
+          <h3>Return Policy</h3>
+          <p>We offer a 30-day return policy. Items must be in original condition with all tags attached. Return shipping is free.</p>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+
+    <div class="related-products" *ngIf="relatedProducts.length > 0">
+      <h2>Related Products</h2>
+      <div class="related-grid">
+        <mat-card *ngFor="let relatedProduct of relatedProducts" class="related-card">
+          <img mat-card-image [src]="relatedProduct.image" [alt]="relatedProduct.name">
+          <mat-card-content>
+            <h3>{{ relatedProduct.name }}</h3>
+            <p class="price">{{ relatedProduct.price }} TND</p>
+          </mat-card-content>
+          <mat-card-actions>
+            <button mat-button color="primary" [routerLink]="['/product', relatedProduct.id]">View Details</button>
+          </mat-card-actions>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="!product" class="product-not-found">
+  <div class="container">
+    <mat-icon>search_off</mat-icon>
+    <h2>Product Not Found</h2>
+    <p>The product you're looking for doesn't exist.</p>
+    <button mat-raised-button color="primary" routerLink="/products">Back to Products</button>
+  </div>
 </div>
