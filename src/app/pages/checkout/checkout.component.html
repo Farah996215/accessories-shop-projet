@@ -1,3 +1,251 @@
-<div class="container">
-  <h1>Checkout</h1>
+<div class="checkout-page">
+  <div class="container">
+    <div class="page-header">
+      <h1>Checkout</h1>
+      <p>Complete your purchase with secure checkout</p>
+    </div>
+
+    <div class="checkout-content" *ngIf="cartItems.length > 0">
+      <div class="checkout-steps">
+        <mat-stepper [linear]="isLinear" #stepper>
+          
+          <mat-step [stepControl]="shippingForm">
+            <ng-template matStepLabel>Shipping Information</ng-template>
+            
+            <form [formGroup]="shippingForm">
+              <div class="form-grid">
+                <mat-form-field appearance="outline" class="half-width">
+                  <mat-label>First Name</mat-label>
+                  <input matInput formControlName="firstName" required>
+                  <mat-error>{{ getShippingFormErrors('firstName') }}</mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="half-width">
+                  <mat-label>Last Name</mat-label>
+                  <input matInput formControlName="lastName" required>
+                  <mat-error>{{ getShippingFormErrors('lastName') }}</mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>Email</mat-label>
+                  <input matInput formControlName="email" type="email" required>
+                  <mat-icon matSuffix>email</mat-icon>
+                  <mat-error>{{ getShippingFormErrors('email') }}</mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>Phone Number</mat-label>
+                  <input matInput formControlName="phone" placeholder="12345678" required>
+                  <mat-icon matSuffix>phone</mat-icon>
+                  <mat-error>{{ getShippingFormErrors('phone') }}</mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>Address</mat-label>
+                  <textarea matInput formControlName="address" rows="2" required></textarea>
+                  <mat-icon matSuffix>home</mat-icon>
+                  <mat-error>{{ getShippingFormErrors('address') }}</mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="half-width">
+                  <mat-label>City</mat-label>
+                  <input matInput formControlName="city" required>
+                  <mat-error>{{ getShippingFormErrors('city') }}</mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="half-width">
+                  <mat-label>ZIP Code</mat-label>
+                  <input matInput formControlName="zipCode" placeholder="1000" required>
+                  <mat-error>{{ getShippingFormErrors('zipCode') }}</mat-error>
+                </mat-form-field>
+              </div>
+
+              <div class="step-actions">
+                <button mat-button routerLink="/cart">Back to Cart</button>
+                <button mat-raised-button color="primary" matStepperNext [disabled]="!shippingForm.valid">
+                  Continue to Payment
+                </button>
+              </div>
+            </form>
+          </mat-step>
+
+          <mat-step [stepControl]="paymentForm">
+            <ng-template matStepLabel>Payment Method</ng-template>
+            
+            <form [formGroup]="paymentForm">
+              <div class="payment-methods">
+                <mat-radio-group formControlName="paymentMethod" class="payment-options">
+                  <mat-radio-button *ngFor="let method of paymentMethods" [value]="method.value" class="payment-option">
+                    <mat-icon>{{ method.icon }}</mat-icon>
+                    <span>{{ method.label }}</span>
+                  </mat-radio-button>
+                </mat-radio-group>
+              </div>
+
+              <div class="card-details" *ngIf="paymentForm.get('paymentMethod')?.value === 'credit'">
+                <h3>Card Details</h3>
+                <div class="form-grid">
+                  <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Card Number</mat-label>
+                    <input matInput formControlName="cardNumber" placeholder="1234 5678 9012 3456" required>
+                    <mat-icon matSuffix>credit_card</mat-icon>
+                    <mat-error>{{ getPaymentFormErrors('cardNumber') }}</mat-error>
+                  </mat-form-field>
+
+                  <mat-form-field appearance="outline" class="half-width">
+                    <mat-label>Expiry Date</mat-label>
+                    <input matInput formControlName="expiryDate" placeholder="MM/YY" required>
+                    <mat-error>{{ getPaymentFormErrors('expiryDate') }}</mat-error>
+                  </mat-form-field>
+
+                  <mat-form-field appearance="outline" class="half-width">
+                    <mat-label>CVV</mat-label>
+                    <input matInput formControlName="cvv" placeholder="123" type="password" required>
+                    <mat-error>{{ getPaymentFormErrors('cvv') }}</mat-error>
+                  </mat-form-field>
+
+                  <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Card Holder Name</mat-label>
+                    <input matInput formControlName="cardHolder" required>
+                    <mat-error>{{ getPaymentFormErrors('cardHolder') }}</mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+
+              <div class="step-actions">
+                <button mat-button matStepperPrevious>Back</button>
+                <button mat-raised-button color="primary" matStepperNext [disabled]="!paymentForm.valid">
+                  Review Order
+                </button>
+              </div>
+            </form>
+          </mat-step>
+
+          <mat-step>
+            <ng-template matStepLabel>Order Review</ng-template>
+            
+            <div class="order-review">
+              <div class="order-summary">
+                <h3>Order Summary</h3>
+                <div class="order-items">
+                  <div *ngFor="let item of cartItems" class="order-item">
+                    <img [src]="item.product.image" [alt]="item.product.name">
+                    <div class="item-details">
+                      <h4>{{ item.product.name }}</h4>
+                      <p>Quantity: {{ item.quantity }}</p>
+                    </div>
+                    <div class="item-total">{{ item.product.price * item.quantity }} TND</div>
+                  </div>
+                </div>
+
+                <div class="order-totals">
+                  <div class="total-row">
+                    <span>Subtotal</span>
+                    <span>{{ getTotalPrice() }} TND</span>
+                  </div>
+                  <div class="total-row">
+                    <span>Tax (19%)</span>
+                    <span>{{ getTax() | number:'1.2-2' }} TND</span>
+                  </div>
+                  <div class="total-row">
+                    <span>Shipping</span>
+                    <span class="free">FREE</span>
+                  </div>
+                  <div class="total-row final">
+                    <span>Total</span>
+                    <span>{{ getFinalTotal() | number:'1.2-2' }} TND</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="shipping-info">
+                <h3>Shipping Address</h3>
+                <p>{{ shippingForm.value.firstName }} {{ shippingForm.value.lastName }}</p>
+                <p>{{ shippingForm.value.address }}</p>
+                <p>{{ shippingForm.value.city }}, {{ shippingForm.value.zipCode }}</p>
+                <p>{{ shippingForm.value.phone }} | {{ shippingForm.value.email }}</p>
+              </div>
+
+              <div class="payment-info">
+                <h3>Payment Method</h3>
+                <p>{{ getPaymentMethodLabel() }}</p>
+                <p *ngIf="paymentForm.value.paymentMethod === 'credit'">
+                  Card ending with {{ paymentForm.value.cardNumber?.slice(-4) }}
+                </p>
+              </div>
+            </div>
+
+            <div class="step-actions">
+              <button mat-button matStepperPrevious>Back</button>
+              <button mat-raised-button color="primary" (click)="placeOrder()">
+                <mat-icon>check_circle</mat-icon>
+                Place Order
+              </button>
+            </div>
+          </mat-step>
+        </mat-stepper>
+      </div>
+
+      <div class="order-sidebar">
+        <mat-card class="order-card">
+          <mat-card-header>
+            <h2>Order Details</h2>
+          </mat-card-header>
+          
+          <mat-card-content>
+            <div class="order-items-preview">
+              <div *ngFor="let item of cartItems" class="preview-item">
+                <img [src]="item.product.image" [alt]="item.product.name">
+                <div class="preview-details">
+                  <span class="product-name">{{ item.product.name }}</span>
+                  <span class="product-quantity">Qty: {{ item.quantity }}</span>
+                </div>
+                <span class="product-price">{{ item.product.price * item.quantity }} TND</span>
+              </div>
+            </div>
+
+            <mat-divider></mat-divider>
+
+            <div class="preview-totals">
+              <div class="preview-row">
+                <span>Subtotal</span>
+                <span>{{ getTotalPrice() }} TND</span>
+              </div>
+              <div class="preview-row">
+                <span>Tax</span>
+                <span>{{ getTax() | number:'1.2-2' }} TND</span>
+              </div>
+              <div class="preview-row">
+                <span>Shipping</span>
+                <span class="free">FREE</span>
+              </div>
+              <div class="preview-row total">
+                <span>Total</span>
+                <span>{{ getFinalTotal() | number:'1.2-2' }} TND</span>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+
+        <mat-card class="security-card">
+          <mat-card-content>
+            <div class="security-features">
+              <div class="security-item">
+                <mat-icon>lock</mat-icon>
+                <span>SSL Secure Payment</span>
+              </div>
+              <div class="security-item">
+                <mat-icon>security</mat-icon>
+                <span>256-bit Encryption</span>
+              </div>
+              <div class="security-item">
+                <mat-icon>verified</mat-icon>
+                <span>PCI Compliant</span>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+  </div>
 </div>
