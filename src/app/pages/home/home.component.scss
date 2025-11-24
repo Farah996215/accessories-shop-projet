@@ -3,6 +3,16 @@
   color: white;
   padding: 120px 0;
   text-align: center;
+  min-height: 500px;
+  display: flex;
+  align-items: center;
+  
+  .container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 16px;
+  }
   
   h1 {
     font-size: 3rem;

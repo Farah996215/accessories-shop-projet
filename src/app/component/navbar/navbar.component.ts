@@ -10,16 +10,7 @@ import { MatMenuModule } from '@angular/material/menu';
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [
-    CommonModule,
-    RouterLink,
-    RouterLinkActive,
-    MatToolbarModule,
-    MatButtonModule,
-    MatIconModule,
-    MatBadgeModule,
-    MatMenuModule
-  ],
+  imports: [ CommonModule,RouterLink,RouterLinkActive,MatToolbarModule,MatButtonModule,MatIconModule,MatBadgeModule,MatMenuModule],
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss']
 })
