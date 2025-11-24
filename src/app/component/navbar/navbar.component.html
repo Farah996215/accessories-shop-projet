@@ -20,17 +20,21 @@
       
       <button mat-button [matMenuTriggerFor]="userMenu" *ngIf="isLoggedIn">
         <mat-icon>account_circle</mat-icon>
-        Account
+        {{ userName || 'Account' }}
       </button>
       
       <mat-menu #userMenu="matMenu">
         <button mat-menu-item>
           <mat-icon>settings</mat-icon>
-          Profile
+          <span>My Profile</span>
+        </button>
+           <button mat-menu-item routerLink="/orders">
+          <mat-icon>shopping_bag</mat-icon>
+          <span>My Orders</span>
         </button>
         <button mat-menu-item>
           <mat-icon>logout</mat-icon>
-          Logout
+          <span>Logout</span>
         </button>
       </mat-menu>
     </div>
