@@ -1,0 +1,38 @@
+<mat-toolbar color="primary" class="navbar">
+  <div class="container">
+    <a routerLink="/home" class="logo">Accessories Store</a>
+    
+    <div class="nav-links">
+      <a mat-button routerLink="/home" routerLinkActive="active">Home</a>
+      <a mat-button routerLink="/products" routerLinkActive="active">Products</a>
+      <a mat-button routerLink="/contact" routerLinkActive="active">AI Assistant</a>
+    </div>
+
+    <div class="nav-actions">
+      <button mat-icon-button [matBadge]="cartItemsCount" matBadgeColor="accent" routerLink="/cart">
+        <mat-icon>shopping_cart</mat-icon>
+      </button>
+      
+      <button mat-button *ngIf="!isLoggedIn" routerLink="/login">
+        <mat-icon>account_circle</mat-icon>
+        Login
+      </button>
+      
+      <button mat-button [matMenuTriggerFor]="userMenu" *ngIf="isLoggedIn">
+        <mat-icon>account_circle</mat-icon>
+        Account
+      </button>
+      
+      <mat-menu #userMenu="matMenu">
+        <button mat-menu-item>
+          <mat-icon>settings</mat-icon>
+          Profile
+        </button>
+        <button mat-menu-item>
+          <mat-icon>logout</mat-icon>
+          Logout
+        </button>
+      </mat-menu>
+    </div>
+  </div>
+</mat-toolbar>
