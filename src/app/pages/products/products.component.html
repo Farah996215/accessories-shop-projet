@@ -1,4 +1,83 @@
-<div class="container">
-  <h1>Our Products</h1>
-  <p>Products page content</p>
+<div class="products-page">
+  <div class="container">
+    <div class="page-header">
+      <h1>Our Collection</h1>
+      <p>Discover our carefully curated selection of accessories</p>
+    </div>
+
+    <div class="filters-section">
+      <div class="filter-group">
+        <mat-form-field appearance="outline">
+          <mat-label>Category</mat-label>
+          <mat-select [(value)]="selectedCategory" (selectionChange)="onCategoryChange(selectedCategory)">
+            <mat-option value="all">All Categories</mat-option>
+            <mat-option *ngFor="let category of categories" [value]="category">
+              {{ category | titlecase }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Sort By</mat-label>
+          <mat-select [(value)]="sortBy" (selectionChange)="onSortChange()">
+            <mat-option value="name">Name</mat-option>
+            <mat-option value="price-low">Price: Low to High</mat-option>
+            <mat-option value="price-high">Price: High to Low</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div class="filter-group">
+        <mat-form-field appearance="outline" class="search-field">
+          <mat-label>Search Products</mat-label>
+          <input matInput [(ngModel)]="searchQuery" (input)="onSearchChange()" placeholder="Type to search...">
+          <mat-icon matSuffix>search</mat-icon>
+        </mat-form-field>
+
+        <div class="price-filter">
+          <label>Max Price: {{priceRange}} TND</label>
+          <input type="range" min="10" max="200" [(ngModel)]="priceRange" (input)="onPriceRangeChange()" class="price-slider">
+        </div>
+      </div>
+    </div>
+
+    <div class="products-count">
+      <p>{{ filteredProducts.length }} products found</p>
+    </div>
+
+    <div class="products-grid">
+      <mat-card *ngFor="let product of filteredProducts" class="product-card">
+        <div class="product-image">
+          <img [src]="product.image" [alt]="product.name">
+          <div class="product-actions">
+            <button mat-icon-button color="primary" (click)="addToCart(product)" class="add-to-cart-btn">
+              <mat-icon>add_shopping_cart</mat-icon>
+            </button>
+          </div>
+        </div>
+        
+        <mat-card-content>
+          <div class="product-category">{{ product.category | titlecase }}</div>
+          <h3>{{ product.name }}</h3>
+          <p class="product-description">{{ product.description }}</p>
+          <div class="product-price">{{ product.price }} TND</div>
+        </mat-card-content>
+        
+        <mat-card-actions>
+          <button mat-raised-button color="primary" [routerLink]="['/product', product.id]">
+            View Details
+          </button>
+          <button mat-button color="accent" (click)="addToCart(product)">
+            Add to Cart
+          </button>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+
+    <div *ngIf="filteredProducts.length === 0" class="no-products">
+      <mat-icon>search_off</mat-icon>
+      <h3>No products found</h3>
+      <p>Try adjusting your filters or search terms</p>
+    </div>
+  </div>
 </div>
