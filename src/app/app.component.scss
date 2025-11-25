@@ -7,3 +7,62 @@ main {
   min-height: calc(100vh - 64px);
   padding-top: 64px;
 }
+
+// Global utility classes
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.mt-20 {
+  margin-top: 20px;
+}
+
+.mb-20 {
+  margin-bottom: 20px;
+}
+
+.p-20 {
+  padding: 20px;
+}
+
+// Loading spinner global style
+.loading-spinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+}
+
+// Error message global style
+.error-message {
+  text-align: center;
+  padding: 40px;
+  color: #f44336;
+  
+  mat-icon {
+    font-size: 3rem;
+    width: 3rem;
+    height: 3rem;
+    margin-bottom: 16px;
+  }
+}
+
+// Success message global style
+.success-message {
+  text-align: center;
+  padding: 40px;
+  color: #4caf50;
+  
+  mat-icon {
+    font-size: 3rem;
+    width: 3rem;
+    height: 3rem;
+    margin-bottom: 16px;
+  }
+}

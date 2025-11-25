@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -9,7 +9,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { AuthService } from '../../services/auth.service';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { AuthService, AuthResponse } from '../../services/auth.service';
 
 @Component({
   selector: 'app-auth',
@@ -23,13 +24,17 @@ import { AuthService } from '../../services/auth.service';
     MatInputModule,
     MatTabsModule,
     MatIconModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatProgressSpinnerModule
   ],
   templateUrl: './auth.component.html',
   styleUrls: ['./auth.component.scss']
 })
 export class AuthComponent {
   activeTab = 0;
+  isLoggingIn = false;
+  isRegistering = false;
+  returnUrl = '/home';
   
   loginForm: FormGroup;
   registerForm: FormGroup;
@@ -38,6 +43,7 @@ export class AuthComponent {
     private fb: FormBuilder,
     private authService: AuthService,
     private router: Router,
+    private route: ActivatedRoute,
     private snackBar: MatSnackBar
   ) {
     this.loginForm = this.fb.group({
@@ -51,6 +57,10 @@ export class AuthComponent {
       password: ['', [Validators.required, Validators.minLength(6)]],
       confirmPassword: ['', [Validators.required]]
     }, { validators: this.passwordMatchValidator });
+
+    this.route.queryParams.subscribe(params => {
+      this.returnUrl = params['returnUrl'] || '/home';
+    });
   }
 
   passwordMatchValidator(form: FormGroup) {
@@ -68,41 +78,75 @@ export class AuthComponent {
 
   onLogin() {
     if (this.loginForm.valid) {
+      this.isLoggingIn = true;
       const { email, password } = this.loginForm.value;
       
-      this.authService.setUser({
-        id: 1,
-        name: 'Test User',
-        email: email
+      this.authService.login(email, password).subscribe({
+        next: (response: AuthResponse) => {
+          this.isLoggingIn = false;
+          if (response.success) {
+            this.snackBar.open('Login successful!', 'Close', {
+              duration: 3000,
+              horizontalPosition: 'right',
+              verticalPosition: 'top'
+            });
+            this.router.navigate([this.returnUrl]);
+          } else {
+            this.snackBar.open(response.message, 'Close', {
+              duration: 5000,
+              horizontalPosition: 'right',
+              verticalPosition: 'top',
+              panelClass: ['error-snackbar']
+            });
+          }
+        },
+        error: (error) => {
+          this.isLoggingIn = false;
+          this.snackBar.open('Login failed. Please try again.', 'Close', {
+            duration: 5000,
+            horizontalPosition: 'right',
+            verticalPosition: 'top',
+            panelClass: ['error-snackbar']
+          });
+        }
       });
-
-      this.snackBar.open('Login successful!', 'Close', {
-        duration: 3000,
-        horizontalPosition: 'right',
-        verticalPosition: 'top'
-      });
-
-      this.router.navigate(['/home']);
     }
   }
 
   onRegister() {
     if (this.registerForm.valid) {
+      this.isRegistering = true;
       const { name, email, password } = this.registerForm.value;
       
-      this.authService.setUser({
-        id: 1,
-        name: name,
-        email: email
+      this.authService.register(name, email, password).subscribe({
+        next: (response: AuthResponse) => {
+          this.isRegistering = false;
+          if (response.success) {
+            this.snackBar.open('Registration successful!', 'Close', {
+              duration: 3000,
+              horizontalPosition: 'right',
+              verticalPosition: 'top'
+            });
+            this.router.navigate([this.returnUrl]);
+          } else {
+            this.snackBar.open(response.message, 'Close', {
+              duration: 5000,
+              horizontalPosition: 'right',
+              verticalPosition: 'top',
+              panelClass: ['error-snackbar']
+            });
+          }
+        },
+        error: (error) => {
+          this.isRegistering = false;
+          this.snackBar.open('Registration failed. Please try again.', 'Close', {
+            duration: 5000,
+            horizontalPosition: 'right',
+            verticalPosition: 'top',
+            panelClass: ['error-snackbar']
+          });
+        }
       });
-
-      this.snackBar.open('Registration successful!', 'Close', {
-        duration: 3000,
-        horizontalPosition: 'right',
-        verticalPosition: 'top'
-      });
-
-      this.router.navigate(['/home']);
     }
   }
 

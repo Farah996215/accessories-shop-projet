@@ -12,6 +12,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDividerModule } from '@angular/material/divider';
 import { CartService, CartItem } from '../../services/cart.service';
+import { AuthService } from '../../services/auth.service';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-checkout',
@@ -27,8 +29,8 @@ import { CartService, CartItem } from '../../services/cart.service';
     MatInputModule,
     MatRadioModule,
     MatIconModule,
-    MatDividerModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatDividerModule
   ],
   templateUrl: './checkout.component.html',
   styleUrls: ['./checkout.component.scss']
@@ -36,6 +38,7 @@ import { CartService, CartItem } from '../../services/cart.service';
 export class CheckoutComponent implements OnInit {
   cartItems: CartItem[] = [];
   isLinear = true;
+  isSubmitting = false;
   
   shippingForm: FormGroup;
   paymentForm: FormGroup;
@@ -48,6 +51,8 @@ export class CheckoutComponent implements OnInit {
 
   constructor(
     private cartService: CartService,
+    private authService: AuthService,
+    private http: HttpClient,
     private router: Router,
     private fb: FormBuilder,
     private snackBar: MatSnackBar
@@ -76,6 +81,25 @@ export class CheckoutComponent implements OnInit {
     
     if (this.cartItems.length === 0) {
       this.router.navigate(['/cart']);
+    }
+
+    if (!this.authService.isLoggedIn()) {
+      this.snackBar.open('Please login to complete your purchase', 'Login', {
+        duration: 5000,
+        horizontalPosition: 'right',
+        verticalPosition: 'top'
+      }).onAction().subscribe(() => {
+        this.router.navigate(['/login'], { queryParams: { returnUrl: '/checkout' } });
+      });
+      this.router.navigate(['/login'], { queryParams: { returnUrl: '/checkout' } });
+      return;
+    }
+
+    const currentUser = this.authService.getCurrentUser();
+    if (currentUser) {
+      this.shippingForm.patchValue({
+        email: currentUser.email
+      });
     }
 
     this.paymentForm.get('paymentMethod')?.valueChanges.subscribe(method => {
@@ -121,17 +145,44 @@ export class CheckoutComponent implements OnInit {
     return this.getTotalPrice() + this.getTax();
   }
 
-  placeOrder() {
-    if (this.shippingForm.valid && this.paymentForm.valid) {
-      this.cartService.clearCart();
-      
-      this.snackBar.open('Order placed successfully!', 'Close', {
-        duration: 5000,
-        horizontalPosition: 'right',
-        verticalPosition: 'top'
-      });
+  async placeOrder() {
+    if (this.shippingForm.valid && this.paymentForm.valid && this.authService.isLoggedIn()) {
+      this.isSubmitting = true;
 
-      this.router.navigate(['/home']);
+      const orderData = {
+        user_id: this.authService.getUserId(),
+        items: this.cartItems,
+        total: this.getFinalTotal(),
+        shipping_info: this.shippingForm.value
+      };
+
+      try {
+        const response = await this.http.post<any>('http://localhost/api/orders.php', orderData).toPromise();
+        
+        if (response.success) {
+          this.cartService.clearCart();
+          
+          this.snackBar.open('Order placed successfully! Order ID: ' + response.order_id, 'Close', {
+            duration: 5000,
+            horizontalPosition: 'right',
+            verticalPosition: 'top'
+          });
+
+          this.router.navigate(['/home']);
+        } else {
+          throw new Error(response.message);
+        }
+      } catch (error: any) {
+        console.error('Order error:', error);
+        this.snackBar.open('Failed to place order: ' + (error.message || 'Unknown error'), 'Close', {
+          duration: 5000,
+          horizontalPosition: 'right',
+          verticalPosition: 'top',
+          panelClass: ['error-snackbar']
+        });
+      } finally {
+        this.isSubmitting = false;
+      }
     }
   }
 
@@ -168,5 +219,4 @@ export class CheckoutComponent implements OnInit {
 
   return method ? method.label : '';
 }
-
 }

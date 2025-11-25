@@ -11,14 +11,19 @@
     <h2>Featured Products</h2>
     <div class="products-grid">
       <mat-card *ngFor="let product of featuredProducts" class="product-card">
-        <img mat-card-image [src]="product.image" [alt]="product.name">
+        <div class="product-image">
+          <img mat-card-image [src]="product.image" [alt]="product.name">
+          <div class="product-badge" [class]="product.category">{{ product.category | titlecase }}</div>
+        </div>
         <mat-card-content>
           <h3>{{ product.name }}</h3>
           <p class="price">{{ product.price }} TND</p>
           <p class="description">{{ product.description }}</p>
         </mat-card-content>
         <mat-card-actions>
-          <button mat-raised-button color="primary" [routerLink]="['/product', product.id]">View Details</button>
+          <button mat-raised-button color="primary" [routerLink]="['/product', product.id]">
+            View Details
+          </button>
         </mat-card-actions>
       </mat-card>
     </div>
@@ -32,19 +37,37 @@
       <div class="category-card" routerLink="/products" [queryParams]="{category: 'necklaces'}">
         <div class="category-image necklaces"></div>
         <h3>Necklaces</h3>
+        <p>Elegant pieces for every occasion</p>
       </div>
       <div class="category-card" routerLink="/products" [queryParams]="{category: 'bracelets'}">
         <div class="category-image bracelets"></div>
         <h3>Bracelets</h3>
+        <p>Stylish wrist accessories</p>
       </div>
       <div class="category-card" routerLink="/products" [queryParams]="{category: 'earrings'}">
         <div class="category-image earrings"></div>
         <h3>Earrings</h3>
+        <p>From studs to statement pieces</p>
       </div>
       <div class="category-card" routerLink="/products" [queryParams]="{category: 'watches'}">
         <div class="category-image watches"></div>
         <h3>Watches</h3>
+        <p>Timeless timepieces</p>
       </div>
+    </div>
+  </div>
+</div>
+
+<div class="ai-section">
+  <div class="container">
+    <div class="ai-promo">
+      <mat-icon>smart_toy</mat-icon>
+      <h2>AI Shopping Assistant</h2>
+      <p>Not sure what to choose? Our AI assistant can help you find the perfect accessory!</p>
+      <button mat-raised-button color="accent" routerLink="/contact">
+        <mat-icon>smart_toy</mat-icon>
+        Try AI Assistant
+      </button>
     </div>
   </div>
 </div>

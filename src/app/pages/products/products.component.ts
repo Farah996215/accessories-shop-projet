@@ -124,6 +124,186 @@ export class ProductsComponent implements OnInit {
         image: 'pictures/hoop earing.jpeg',
         category: 'earrings',
         inStock: true
+      },
+      { 
+        id: 9,
+        name: 'Elegant Black Leather Watch',
+        price: 120,
+        description: 'Stylish black leather watch with minimalist design',
+        image: 'pictures/black-watch.jpeg',
+        category: 'watches',
+        inStock: true
+      },
+      {
+        id: 10,
+        name: 'Crystal Charm Bracelet',
+        price: 55,
+        description: 'Bracelet with multiple crystal charms',
+        image: 'pictures/charm-bracelet.jpeg',
+        category: 'bracelets',
+        inStock: true
+      },
+      {
+        id: 11,
+        name: 'Men’s Steel Chain',
+        price: 140,
+        description: 'Thick stainless steel chain for men',
+        image: 'pictures/steel-chain.jpeg',
+        category: 'necklaces',
+        inStock: true
+      },
+      {
+        id: 12,
+        name: 'Rose Quartz Ring',
+        price: 95,
+        description: 'Beautiful ring with natural rose quartz stone',
+        image: 'pictures/rose-quartz.jpeg',
+        category: 'rings',
+        inStock: true
+      },
+      {
+        id: 13,
+        name: 'Sapphire Drop Earrings',
+        price: 130,
+        description: 'Elegant sapphire stone drop earrings',
+        image: 'pictures/sapphire-earrings.jpeg',
+        category: 'earrings',
+        inStock: true
+      },
+      {
+        id: 14,
+        name: 'Luxury Chrono Watch',
+        price: 300,
+        description: 'Premium chronograph watch with leather strap',
+        image: 'pictures/chrono-watch.jpeg',
+        category: 'watches',
+        inStock: true
+      },
+      {
+        id: 15,
+        name: 'Thin Silver Bracelet',
+        price: 40,
+        description: 'Minimalist thin silver bracelet for daily wear',
+        image: 'pictures/thin-bracelet.jpeg',
+        category: 'bracelets',
+        inStock: true
+      },
+      {
+        id: 16,
+        name: 'Diamond Cut Chain',
+        price: 210,
+        description: 'Shiny diamond-cut gold chain',
+        image: 'pictures/diamond-chain.jpeg',
+        category: 'necklaces',
+        inStock: true
+      },
+      {
+        id: 17,
+        name: 'Emerald Band Ring',
+        price: 170,
+        description: 'Gold ring with embedded emerald stones',
+        image: 'pictures/emerald-ring.jpeg',
+        category: 'rings',
+        inStock: true
+      },
+      {
+        id: 18,
+        name: 'Pearl Drop Earrings',
+        price: 85,
+        description: 'Elegant pearl drop earrings for special occasions',
+        image: 'pictures/pearl-drop.jpeg',
+        category: 'earrings',
+        inStock: true
+      },
+      {
+        id: 19,
+        name: 'Digital Sports Watch',
+        price: 110,
+        description: 'Water-resistant digital sports watch with LED display',
+        image: 'pictures/digital-sport.jpeg',
+        category: 'watches',
+        inStock: true
+      },
+      {
+        id: 20,
+        name: 'Braided Leather Bracelet',
+        price: 35,
+        description: 'Casual braided leather bracelet for men',
+        image: 'pictures/braided-bracelet.jpeg',
+        category: 'bracelets',
+        inStock: true
+      },
+      {
+        id: 21,
+        name: 'Gold Heart Necklace',
+        price: 160,
+        description: 'Romantic gold heart pendant necklace',
+        image: 'pictures/heart-necklace.jpeg',
+        category: 'necklaces',
+        inStock: true
+      },
+      {
+        id: 22,
+        name: 'Opal Spark Ring',
+        price: 125,
+        description: 'Opal gemstone ring with sparkly finish',
+        image: 'pictures/opal-ring.jpeg',
+        category: 'rings',
+        inStock: true
+      },
+      {
+        id: 23,
+        name: 'Tiny Stud Earrings Set',
+        price: 45,
+        description: 'Set of 6 tiny stud earrings in different shapes',
+        image: 'pictures/stud-set.jpeg',
+        category: 'earrings',
+        inStock: true
+      },
+      {
+        id: 24,
+        name: 'Military Style Watch',
+        price: 150,
+        description: 'Tactical military watch with rugged design',
+        image: 'pictures/military-watch.jpeg',
+        category: 'watches',
+        inStock: true
+      },
+      {
+        id: 25,
+        name: 'Gold Bead Bracelet',
+        price: 70,
+        description: 'Simple bracelet with small gold beads',
+        image: 'pictures/gold-bead.jpeg',
+        category: 'bracelets',
+        inStock: true
+      },
+      {
+        id: 26,
+        name: 'Silver Double Layer Chain',
+        price: 95,
+        description: 'Trendy double-layer silver chain',
+        image: 'pictures/double-chain.jpeg',
+        category: 'necklaces',
+        inStock: true
+      },
+      {
+        id: 27,
+        name: 'Crown Ring',
+        price: 60,
+        description: 'Cute crown-shaped ring for a stylish look',
+        image: 'pictures/crown-ring.jpeg',
+        category: 'rings',
+        inStock: true
+      },
+      {
+        id: 28,
+        name: 'Mini Shoulder Bag',
+        price: 180,
+        description: 'Trendy mini shoulder bag for accessories',
+        image: 'pictures/mini-bag.jpeg',
+        category: 'bags',
+        inStock: true
       }
     ];
     this.applyFilters();

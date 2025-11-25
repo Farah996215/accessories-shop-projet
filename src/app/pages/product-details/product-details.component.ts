@@ -114,18 +114,18 @@ export class ProductDetailsComponent implements OnInit {
       {
         id: 1,
         name: 'Silver Diamond Necklace',
-        price: 45,
+        price: 450,
         description: 'Elegant silver necklace with diamond pendant',
-        image: 'assets/necklace.jpg',
+        image: 'pctures/necklace.jpeg',
         category: 'necklaces',
         inStock: true
       },
       {
         id: 2,
         name: 'Gold Plated Bracelet',
-        price: 75,
+        price: 750,
         description: 'Beautiful gold plated bracelet',
-        image: 'assets/bracelet.jpg',
+        image: 'pictures/braclet.jpeg',
         category: 'bracelets',
         inStock: true
       },
@@ -134,7 +134,7 @@ export class ProductDetailsComponent implements OnInit {
         name: 'Silver Chain Necklace',
         price: 28,
         description: 'Simple silver chain necklace',
-        image: 'assets/necklace2.jpg',
+        image: 'pictures/simple chain.jpeg',
         category: 'necklaces',
         inStock: true
       }
