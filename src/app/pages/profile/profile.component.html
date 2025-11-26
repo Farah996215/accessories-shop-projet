@@ -24,7 +24,7 @@
               </div>
               <div class="stat-item">
                 <span class="stat-number">
-                  {{ recentOrders.filter(order => order.status === 'delivered').length }}
+                  {{ completedOrdersCount }}
                 </span>
                 <span class="stat-label">Completed</span>
               </div>
@@ -37,7 +37,7 @@
             <h3>Quick Actions</h3>
           </mat-card-header>
           <mat-card-content>
-            <button mat-button class="action-button" routerLink="/orders">
+            <button mat-button class="action-button" (click)="viewAllOrders()">
               <mat-icon>shopping_bag</mat-icon>
               View All Orders
             </button>

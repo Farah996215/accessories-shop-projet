@@ -17,6 +17,7 @@ import { AuthService, User } from '../../services/auth.service';
 export class ProfileComponent implements OnInit {
   user: User | null = null;
   recentOrders: any[] = [];
+  completedOrdersCount: number=0;
 
   constructor(private authService: AuthService, private router: Router) {}
   ngOnInit(): void {
@@ -52,7 +53,12 @@ export class ProfileComponent implements OnInit {
         items: 1
       }
     ];
+    this.calculateCompletedOrders();
   }
+  calculateCompletedOrders() {
+    this.completedOrdersCount = this.recentOrders.filter(order => order.status === 'delivered').length;
+  }
+
    getStatusColor(status: string): string {
     switch (status) {
       case 'delivered': return 'success';
