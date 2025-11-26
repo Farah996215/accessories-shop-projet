@@ -55,27 +55,27 @@ export class ProductsComponent implements OnInit {
     this.products = [
       {
         id: 1,
-        name: 'Silver Diamond Necklace',
+        name: 'Silver Necklace',
         price: 450,
-        description: 'Elegant silver necklace with diamond pendant',
+        description: 'Elegant silver necklace with gemstone',
         image: 'pictures/necklace.jpeg',
         category: 'necklaces',
         inStock: true
       },
       {
         id: 2,
-        name: 'Gold Plated Bracelet',
+        name: 'Gold Bracelet',
         price: 750,
-        description: 'Beautiful gold plated bracelet with intricate design',
+        description: 'Beautiful gold plated bracelet',
         image: 'pictures/braclet.jpeg',
         category: 'bracelets',
         inStock: true
       },
       {
         id: 3,
-        name: 'Pearl Stud Earrings',
+        name: 'Pearl Earrings',
         price: 200,
-        description: 'Classic pearl stud earrings for everyday wear',
+        description: 'Classic pearl stud earrings',
         image: 'pictures/earings.jpeg',
         category: 'earrings',
         inStock: true
@@ -130,7 +130,7 @@ export class ProductsComponent implements OnInit {
         name: 'Elegant Black Leather Watch',
         price: 120,
         description: 'Stylish black leather watch with minimalist design',
-        image: 'pictures/black-watch.jpeg',
+        image: 'pictures/blck watch.jpg',
         category: 'watches',
         inStock: true
       },
@@ -139,7 +139,7 @@ export class ProductsComponent implements OnInit {
         name: 'Crystal Charm Bracelet',
         price: 55,
         description: 'Bracelet with multiple crystal charms',
-        image: 'pictures/charm-bracelet.jpeg',
+        image: 'pictures/crystal.jpeg',
         category: 'bracelets',
         inStock: true
       },
@@ -148,16 +148,16 @@ export class ProductsComponent implements OnInit {
         name: 'Men’s Steel Chain',
         price: 140,
         description: 'Thick stainless steel chain for men',
-        image: 'pictures/steel-chain.jpeg',
+        image: 'pictures/men.jpeg',
         category: 'necklaces',
         inStock: true
       },
       {
         id: 12,
-        name: 'Rose Quartz Ring',
+        name: 'Blue Quartz Ring',
         price: 95,
-        description: 'Beautiful ring with natural rose quartz stone',
-        image: 'pictures/rose-quartz.jpeg',
+        description: 'Beautiful ring with natural blue quartz stone',
+        image: 'pictures/blue.jpeg',
         category: 'rings',
         inStock: true
       },
@@ -166,7 +166,7 @@ export class ProductsComponent implements OnInit {
         name: 'Sapphire Drop Earrings',
         price: 130,
         description: 'Elegant sapphire stone drop earrings',
-        image: 'pictures/sapphire-earrings.jpeg',
+        image: 'pictures/green crystal.jpg',
         category: 'earrings',
         inStock: true
       },
@@ -175,7 +175,7 @@ export class ProductsComponent implements OnInit {
         name: 'Luxury Chrono Watch',
         price: 300,
         description: 'Premium chronograph watch with leather strap',
-        image: 'pictures/chrono-watch.jpeg',
+        image: 'pictures/leather_strap.jpeg',
         category: 'watches',
         inStock: true
       },
@@ -184,7 +184,7 @@ export class ProductsComponent implements OnInit {
         name: 'Thin Silver Bracelet',
         price: 40,
         description: 'Minimalist thin silver bracelet for daily wear',
-        image: 'pictures/thin-bracelet.jpeg',
+        image: 'pictures/daily.jpeg',
         category: 'bracelets',
         inStock: true
       },
@@ -193,7 +193,7 @@ export class ProductsComponent implements OnInit {
         name: 'Diamond Cut Chain',
         price: 210,
         description: 'Shiny diamond-cut gold chain',
-        image: 'pictures/diamond-chain.jpeg',
+        image: 'pictures/gold.jpeg',
         category: 'necklaces',
         inStock: true
       },
@@ -202,7 +202,7 @@ export class ProductsComponent implements OnInit {
         name: 'Emerald Band Ring',
         price: 170,
         description: 'Gold ring with embedded emerald stones',
-        image: 'pictures/emerald-ring.jpeg',
+        image: 'pictures/emerald_ring.jpeg',
         category: 'rings',
         inStock: true
       },
@@ -211,7 +211,7 @@ export class ProductsComponent implements OnInit {
         name: 'Pearl Drop Earrings',
         price: 85,
         description: 'Elegant pearl drop earrings for special occasions',
-        image: 'pictures/pearl-drop.jpeg',
+        image: 'pictures/pearl_drop.jpeg',
         category: 'earrings',
         inStock: true
       },
@@ -220,7 +220,7 @@ export class ProductsComponent implements OnInit {
         name: 'Digital Sports Watch',
         price: 110,
         description: 'Water-resistant digital sports watch with LED display',
-        image: 'pictures/digital-sport.jpeg',
+        image: 'pictures//digital_sport.jpeg',
         category: 'watches',
         inStock: true
       },
@@ -229,7 +229,7 @@ export class ProductsComponent implements OnInit {
         name: 'Braided Leather Bracelet',
         price: 35,
         description: 'Casual braided leather bracelet for men',
-        image: 'pictures/braided-bracelet.jpeg',
+        image: 'pictures/braided_bracelet.jpeg',
         category: 'bracelets',
         inStock: true
       },
@@ -238,7 +238,7 @@ export class ProductsComponent implements OnInit {
         name: 'Gold Heart Necklace',
         price: 160,
         description: 'Romantic gold heart pendant necklace',
-        image: 'pictures/heart-necklace.jpeg',
+        image: 'pictures/my_lovely_one.jpeg',
         category: 'necklaces',
         inStock: true
       },
@@ -247,64 +247,46 @@ export class ProductsComponent implements OnInit {
         name: 'Opal Spark Ring',
         price: 125,
         description: 'Opal gemstone ring with sparkly finish',
-        image: 'pictures/opal-ring.jpeg',
+        image: 'pictures/opal_ring.jpeg',
         category: 'rings',
         inStock: true
       },
       {
         id: 23,
-        name: 'Tiny Stud Earrings Set',
-        price: 45,
-        description: 'Set of 6 tiny stud earrings in different shapes',
-        image: 'pictures/stud-set.jpeg',
-        category: 'earrings',
-        inStock: true
-      },
-      {
-        id: 24,
         name: 'Military Style Watch',
         price: 150,
         description: 'Tactical military watch with rugged design',
-        image: 'pictures/military-watch.jpeg',
+        image: 'pictures/military_watch.jpeg',
         category: 'watches',
         inStock: true
       },
       {
-        id: 25,
+        id: 24,
         name: 'Gold Bead Bracelet',
         price: 70,
         description: 'Simple bracelet with small gold beads',
-        image: 'pictures/gold-bead.jpeg',
+        image: 'pictures/gold_bead.jpeg',
         category: 'bracelets',
         inStock: true
       },
       {
-        id: 26,
+        id: 25,
         name: 'Silver Double Layer Chain',
         price: 95,
         description: 'Trendy double-layer silver chain',
-        image: 'pictures/double-chain.jpeg',
+        image: 'pictures/double_chain.jpeg',
         category: 'necklaces',
         inStock: true
       },
       {
-        id: 27,
+        id: 26,
         name: 'Crown Ring',
         price: 60,
         description: 'Cute crown-shaped ring for a stylish look',
-        image: 'pictures/crown-ring.jpeg',
+        image: 'pictures/crown_ring.jpeg',
         category: 'rings',
         inStock: true
       },
-      {
-        id: 28,
-        name: 'Mini Shoulder Bag',
-        price: 180,
-        description: 'Trendy mini shoulder bag for accessories',
-        image: 'pictures/mini-bag.jpeg',
-        category: 'bags',
-        inStock: true
-      }
     ];
     this.applyFilters();
   }

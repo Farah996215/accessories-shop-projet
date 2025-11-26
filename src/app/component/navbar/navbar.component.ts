@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { Router,RouterLink, RouterLinkActive } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
@@ -23,14 +23,13 @@ export class NavbarComponent implements OnInit {
 
   constructor(
     private cartService: CartService,
-    private authService: AuthService
+    private authService: AuthService,
+    private router: Router
   ) {}
 
   ngOnInit() {
     this.updateCartCount();
     this.updateAuthState();
-
-    this.cartService.getCartItems();
     
     this.authService.currentUser$.subscribe(user => {
       this.isLoggedIn = !!user;
@@ -52,5 +51,8 @@ export class NavbarComponent implements OnInit {
     this.authService.logout();
     this.isLoggedIn = false;
     this.userName = '';
+
+    this.router.navigate(['/home']);
+    console.log('User logged out successfully.');
   }
 }
