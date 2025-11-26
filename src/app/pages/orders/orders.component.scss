@@ -1,0 +1,150 @@
+.orders-page {
+  padding: 32px 0;
+  min-height: 100vh;
+  background: #f8f9fa;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+.page-header {
+  margin-bottom: 48px;
+  
+  h1 {
+    font-size: 2.8rem;
+    color: #333;
+    margin-bottom: 16px;
+    font-weight: 300;
+  }
+  
+  p {
+    font-size: 1.2rem;
+    color: #666;
+  }
+}
+
+.orders-card {
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  overflow: hidden;
+}
+
+.orders-table {
+  width: 100%;
+  
+  .mat-header-cell {
+    font-weight: 600;
+    color: #333;
+    font-size: 1rem;
+    background: #f8f9fa;
+  }
+  
+  .mat-cell {
+    padding: 20px 8px;
+    border-bottom: 1px solid #f0f0f0;
+  }
+}
+
+.order-date {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.order-items {
+  .items-preview {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .item-preview {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    
+    img {
+      width: 40px;
+      height: 40px;
+      object-fit: cover;
+      border-radius: 6px;
+    }
+    
+    span {
+      font-size: 0.9rem;
+      color: #333;
+    }
+  }
+  
+  .more-items {
+    font-size: 0.8rem;
+    color: #666;
+    font-style: italic;
+  }
+}
+
+.order-total {
+  font-weight: 600;
+  color: #333;
+  font-size: 1.1rem;
+}
+
+.order-actions {
+  text-align: right;
+}
+
+.no-orders {
+  text-align: center;
+  padding: 80px 20px;
+  color: #666;
+  
+  mat-icon {
+    font-size: 4rem;
+    width: 4rem;
+    height: 4rem;
+    margin-bottom: 24px;
+    opacity: 0.5;
+  }
+  
+  h3 {
+    font-size: 1.8rem;
+    color: #333;
+    margin-bottom: 16px;
+    font-weight: 400;
+  }
+  
+  p {
+    font-size: 1.1rem;
+    margin-bottom: 32px;
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .orders-table {
+    .mat-header-row,
+    .mat-row {
+      display: flex;
+      flex-direction: column;
+      padding: 16px 0;
+      border-bottom: 2px solid #f0f0f0;
+    }
+    
+    .mat-cell {
+      padding: 8px 0;
+      border-bottom: none;
+      
+      &:before {
+        content: attr(data-label);
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 4px;
+        display: block;
+      }
+    }
+  }
+}

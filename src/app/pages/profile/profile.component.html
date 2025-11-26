@@ -1,1 +1,130 @@
-<p>profile works!</p>
+<div class="profile-page">
+  <div class="container">
+    <div class="page-header">
+      <h1>My Profile</h1>
+      <p>Manage your account and view your order history</p>
+    </div>
+
+    <div class="profile-content" *ngIf="user">
+      <div class="profile-sidebar">
+        <mat-card class="profile-card">
+          <mat-card-content>
+            <div class="user-avatar">
+              <mat-icon>account_circle</mat-icon>
+            </div>
+            <h2>{{ user.name }}</h2>
+            <p class="user-email">{{ user.email }}</p>
+            
+            <mat-divider></mat-divider>
+            
+            <div class="profile-stats">
+              <div class="stat-item">
+                <span class="stat-number">{{ recentOrders.length }}</span>
+                <span class="stat-label">Total Orders</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-number">
+                  {{ recentOrders.filter(order => order.status === 'delivered').length }}
+                </span>
+                <span class="stat-label">Completed</span>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+
+        <mat-card class="quick-actions-card">
+          <mat-card-header>
+            <h3>Quick Actions</h3>
+          </mat-card-header>
+          <mat-card-content>
+            <button mat-button class="action-button" routerLink="/orders">
+              <mat-icon>shopping_bag</mat-icon>
+              View All Orders
+            </button>
+            <button mat-button class="action-button" routerLink="/products">
+              <mat-icon>shopping_cart</mat-icon>
+              Continue Shopping
+            </button>
+            <button mat-button class="action-button" routerLink="/contact">
+              <mat-icon>support_agent</mat-icon>
+              Contact Support
+            </button>
+          </mat-card-content>
+        </mat-card>
+      </div>
+
+      <div class="profile-main">
+        <mat-card class="recent-orders-card">
+          <mat-card-header>
+            <h2>Recent Orders</h2>
+            <button mat-button color="primary" (click)="viewAllOrders()">
+              View All
+            </button>
+          </mat-card-header>
+          
+          <mat-card-content>
+            <div *ngIf="recentOrders.length > 0; else noOrders" class="orders-list">
+              <div *ngFor="let order of recentOrders" class="order-item">
+                <div class="order-info">
+                  <div class="order-header">
+                    <h3>Order #{{ order.id }}</h3>
+                    <span class="order-date">{{ order.date }}</span>
+                  </div>
+                  <div class="order-details">
+                    <span class="order-items">{{ order.items }} item(s)</span>
+                    <span class="order-total">{{ order.total }} TND</span>
+                  </div>
+                </div>
+                <div class="order-actions">
+                  <span class="order-status" [class]="getStatusColor(order.status)">
+                    {{ order.status }}
+                  </span>
+                  <button mat-button color="primary" (click)="viewOrderDetails(order.id)">
+                    View Details
+                  </button>
+                </div>
+              </div>
+            </div>
+            
+            <ng-template #noOrders>
+              <div class="no-orders">
+                <mat-icon>shopping_bag</mat-icon>
+                <h3>No orders yet</h3>
+                <p>Start shopping to see your orders here</p>
+                <button mat-raised-button color="primary" routerLink="/products">
+                  Start Shopping
+                </button>
+              </div>
+            </ng-template>
+          </mat-card-content>
+        </mat-card>
+
+        <mat-card class="account-info-card">
+          <mat-card-header>
+            <h2>Account Information</h2>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="info-grid">
+              <div class="info-item">
+                <label>Full Name</label>
+                <p>{{ user.name }}</p>
+              </div>
+              <div class="info-item">
+                <label>Email Address</label>
+                <p>{{ user.email }}</p>
+              </div>
+              <div class="info-item">
+                <label>Member Since</label>
+                <p>January 2024</p>
+              </div>
+              <div class="info-item">
+                <label>Account Status</label>
+                <p class="status-active">Active</p>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+</div>
