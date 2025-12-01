@@ -1,137 +1,265 @@
+// ——— Theme Palette ———————————————
+$color-primary-900: #A26E60;
+$color-primary-700: #C49081;
+$color-primary-500: #DDADA0;
+$color-primary-300: #EECBBF;
+$color-primary-100: #FFE8DE;
+
+$color-surface: #FFFFFF;
+$color-on-primary: #FFFFFF;
+$color-on-surface: #333333;
+
+$easing-entrance: cubic-bezier(0.34, 1.56, 0.64, 1);
+$easing-exit: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+$duration-quick: 0.2s;
+$duration-standard: 0.3s;
+$duration-delicate: 0.45s;
+
+$spacing-unit: 0.5rem;
+$border-radius-md: 8px;
+$border-radius-lg: 12px;
+
+// ——— Navbar ——————————————————
 .navbar {
-  position: fixed;
+  --mdc-theme-primary: #{$color-primary-900};
+  --mdc-theme-on-primary: #{$color-on-primary};
+  --mdc-theme-surface: #{$color-surface};
+
+  background: linear-gradient(120deg, $color-primary-900 0%, $color-primary-700 100%);
+  box-shadow:
+    0 2px 8px rgba($color-primary-900, 0.08),
+    0 1px 2px rgba(black, 0.06);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border-bottom: 1px solid rgba($color-primary-300, 0.3);
+  height: 76px;
+  position: sticky;
   top: 0;
-  left: 0;
-  right: 0;
-  z-index: 1000;
-  height: 64px;
-  
+  z-index: 1050;
+  will-change: transform;
+
   .container {
+    max-width: 1440px;
+    margin-inline: auto;
     display: flex;
+    align-items: center;
     justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 16px;
+    height: 100%;
+    padding-inline: calc(3 * $spacing-unit);
   }
-}
 
-.logo {
-  font-size: 1.4rem;
-  font-weight: bold;
-  text-decoration: none;
-  color: white;
-  display: flex;
-  align-items: center;
-  gap: 8px;
+  .logo {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-weight: 700;
+    font-size: clamp(1.3rem, 2.8vw, 1.65rem);
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    color: $color-on-primary;
+    text-decoration: none;
+    transition:
+      transform $duration-quick $easing-entrance,
+      opacity $duration-quick ease;
 
-  mat-icon{
-    color: #ffd700;
+    &:hover {
+      opacity: 1;
+      transform: translateY(-2px);
+    }
+
+    &:focus-visible {
+      outline: 2px solid $color-primary-300;
+      outline-offset: 4px;
+      border-radius: $border-radius-md;
+    }
   }
-}
 
+  .nav-links {
+    display: flex;
+    gap: calc(2.5 * $spacing-unit);
+    margin-inline-start: calc(3 * $spacing-unit);
 
-.nav-links {
-  display: flex;
-  gap: 4px;
-  
-  a {
+    a {
+      font-family: 'Inter', sans-serif;
+      font-weight: 500;
+      font-size: 1.05rem;
+      line-height: 1.4;
+      color: $color-on-primary;
+      text-decoration: none;
+      padding: calc(0.75 * $spacing-unit) calc(1.25 * $spacing-unit);
+      border-radius: $border-radius-md;
+      position: relative;
+      transition: all $duration-standard $easing-entrance;
+      user-select: none;
+
+      &::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        border-radius: $border-radius-md;
+        background: rgba($color-on-primary, 0.08);
+        opacity: 0;
+        transition: opacity $duration-quick ease;
+        pointer-events: none;
+      }
+
+      &:hover::before {
+        opacity: 1;
+      }
+
+      &.active {
+        &::before {
+          opacity: 0.12;
+        }
+
+        &::after {
+          opacity: 1;
+          transform: scaleX(1);
+        }
+      }
+
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: calc(0.375 * $spacing-unit);
+        left: 50%;
+        transform: translateX(-50%) scaleX(0);
+        width: 60%;
+        height: 2px;
+        background: $color-on-primary;
+        border-radius: 1px;
+        opacity: 0;
+        transition:
+          transform $duration-delicate $easing-entrance,
+          opacity $duration-quick ease;
+      }
+
+      &:hover::after {
+        opacity: 1;
+        transform: translateX(-50%) scaleX(1);
+      }
+
+      &:focus-visible {
+        outline: 2px solid $color-primary-300;
+        outline-offset: 2px;
+        border-radius: $border-radius-md;
+      }
+    }
+  }
+
+  .nav-actions {
     display: flex;
     align-items: center;
-    gap: 6px;
-    border-radius: 20px;
-    transition: all 0.3s ease;
-    
-    &.active {
-      background: rgba(255, 255, 255, 0.15);
+    gap: calc(1.5 * $spacing-unit);
+
+    button {
+      font-family: 'Inter', sans-serif;
+      font-weight: 500;
+      font-size: 1rem;
+      color: $color-on-primary !important;
+      background: transparent !important;
+      padding: calc(0.75 * $spacing-unit) calc(1.5 * $spacing-unit) !important;
+      border-radius: $border-radius-lg !important;
+      display: flex;
+      align-items: center;
+      gap: calc(0.75 * $spacing-unit);
+      transition:
+        background $duration-quick ease,
+        transform $duration-quick $easing-entrance;
+      will-change: transform, background;
+
+      &:hover {
+        background: rgba($color-on-primary, 0.1) !important;
+        transform: translateY(-2px);
+      }
+
+      &:active {
+        transform: translateY(0);
+      }
+
+      &:focus-visible {
+        outline: 2px solid $color-primary-300;
+        outline-offset: 2px;
+      }
+
+      mat-icon {
+        font-size: 1.35rem;
+        width: 22px;
+        height: 22px;
+        line-height: 22px;
+        display: block;
+        transition: transform $duration-standard ease;
+      }
+
+      &:hover mat-icon {
+        transform: scale(1.12);
+      }
     }
-    
-    &:hover:not(.active) {
-      background: rgba(255, 255, 255, 0.1);
+
+    [matBadge] {
+      position: relative;
+
+      .mat-badge-content {
+        --mdc-badge-color: #{$color-primary-100};
+        --mdc-badge-label-text-color: #{$color-primary-900};
+        font-weight: 700;
+        font-size: 0.75rem;
+        min-width: 22px;
+        height: 22px;
+        padding-inline: 4px;
+        box-shadow: 0 2px 4px rgba($color-primary-900, 0.25);
+        transform: translate(4px, -4px);
+        animation: badge-pulse 2s infinite;
+      }
     }
-    
-    mat-icon {
-      font-size: 18px;
-      width: 18px;
-      height: 18px;
+  }
+
+  ::ng-deep .mat-mdc-menu .mat-mdc-menu-item {
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    color: $color-on-surface !important;
+    padding-block: calc(0.875 * $spacing-unit) !important;
+    padding-inline: calc(1.25 * $spacing-unit) !important;
+    transition: background $duration-quick ease;
+
+    .mat-icon {
+      color: $color-primary-700 !important;
+      margin-inline-end: 14px !important;
+    }
+
+    &:hover {
+      background: rgba($color-primary-300, 0.4) !important;
+    }
+
+    &:focus-visible {
+      outline: 2px solid $color-primary-500;
+      outline-offset: -2px;
     }
   }
 }
 
-.nav-actions {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.cart-btn {
-  position: relative;
-  transition: transform 0.3s ease;
-  
-  &:hover {
-    transform: scale(1.1);
+@keyframes badge-pulse {
+  0% {
+    transform: translate(4px, -4px) scale(1);
+    box-shadow: 0 0 0 0 rgba($color-primary-100, 0.7);
   }
-  
-  ::ng-deep .mat-badge-content {
-    font-size: 10px;
-    font-weight: bold;
+  50% {
+    transform: translate(4px, -4px) scale(1.08);
+  }
+  100% {
+    transform: translate(4px, -4px) scale(1);
+    box-shadow: 0 0 0 10px rgba($color-primary-100, 0);
   }
 }
 
-.login-btn, .user-btn {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  border-radius: 20px;
-  transition: all 0.3s ease;
-  
-  &:hover {
-    background: rgba(255, 255, 255, 0.1);
-  }
-  
-  mat-icon {
-    font-size: 20px;
-    width: 20px;
-    height: 20px;
-  }
-}
-
-.user-menu {
-  min-width: 180px;
-  
-  button {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    
-    mat-icon {
-      font-size: 18px;
-      width: 18px;
-      height: 18px;
-      color: #666;
-    }
-    
-    span {
-      font-size: 0.9rem;
-    }
-  }
-}
-
-@media (max-width: 768px) {
-  .logo span {
+@media (max-width: 960px) {
+  .navbar .nav-links {
     display: none;
   }
-  
-  .nav-links a span {
-    display: none;
+
+  .navbar .container {
+    padding-inline: calc(2 * $spacing-unit);
   }
-  
-  .nav-links a mat-icon {
-    margin-right: 0;
-  }
-  
-  .login-btn span, .user-btn span {
-    display: none;
+
+  .navbar {
+    height: 68px;
   }
 }
