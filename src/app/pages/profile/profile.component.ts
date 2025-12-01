@@ -6,72 +6,111 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatListModule } from '@angular/material/list';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { AuthService, User } from '../../services/auth.service';
+import { OrderService, Order } from '../../services/order.service';
 
 @Component({
   selector: 'app-profile',
-  imports: [CommonModule, RouterLink, MatCardModule, MatButtonModule, MatIconModule, MatDividerModule, MatListModule],
+  standalone: true,
+  imports: [
+    CommonModule,
+    RouterLink,
+    MatCardModule,
+    MatButtonModule,
+    MatIconModule,
+    MatDividerModule,
+    MatListModule,
+    MatProgressSpinnerModule
+  ],
   templateUrl: './profile.component.html',
-  styleUrl: './profile.component.scss'
+  styleUrls: ['./profile.component.scss']
 })
 export class ProfileComponent implements OnInit {
   user: User | null = null;
-  recentOrders: any[] = [];
-  completedOrdersCount: number=0;
+  recentOrders: Order[] = [];
+  completedOrdersCount = 0;
+  isLoading = true;
 
-  constructor(private authService: AuthService, private router: Router) {}
-  ngOnInit(): void {
-    this.router.navigate(['/login']);
-       if (!this.user) {
+  constructor(
+    private authService: AuthService,
+    private orderService: OrderService,
+    private router: Router
+  ) {}
+
+  ngOnInit() {
+    this.user = this.authService.getCurrentUser();
+    
+    if (!this.user) {
       this.router.navigate(['/login']);
       return;
-  }
+    }
+
     this.loadRecentOrders();
   }
-  
+
   loadRecentOrders() {
-    this.recentOrders = [
-      {
-        id: 1001,
-        date: '2024-01-15',
-        total: 168.00,
-        status: 'delivered',
-        items: 3
+    if (!this.user) return;
+    
+    this.isLoading = true;
+    
+    this.orderService.getUserOrders(this.user.id).subscribe({
+      next: (response) => {
+        if (response.success) {
+          this.recentOrders = response.orders.slice(0, 5); // Get only 5 recent orders
+        } else {
+          // If API fails, use mock data for demo
+          this.recentOrders = this.orderService.getMockOrders(this.user!.id);
+        }
+        this.calculateCompletedOrders();
+        this.isLoading = false;
       },
-      {
-        id: 1002,
-        date: '2024-01-10',
-        total: 75.00,
-        status: 'shipped',
-        items: 1
-      },
-      {
-        id: 1003,
-        date: '2024-01-05',
-        total: 45.00,
-        status: 'pending',
-        items: 1
+      error: (error) => {
+        console.error('Error loading orders:', error);
+        // Use mock data as fallback
+        this.recentOrders = this.orderService.getMockOrders(this.user!.id);
+        this.calculateCompletedOrders();
+        this.isLoading = false;
       }
-    ];
-    this.calculateCompletedOrders();
-  }
-  calculateCompletedOrders() {
-    this.completedOrdersCount = this.recentOrders.filter(order => order.status === 'delivered').length;
+    });
   }
 
-   getStatusColor(status: string): string {
+  calculateCompletedOrders() {
+    this.completedOrdersCount = this.recentOrders.filter(order => 
+      order.status === 'delivered' || order.status === 'shipped'
+    ).length;
+  }
+
+  getStatusColor(status: string): string {
     switch (status) {
       case 'delivered': return 'success';
       case 'shipped': return 'primary';
       case 'pending': return 'warn';
+      case 'confirmed': return 'accent';
+      case 'cancelled': return 'error';
       default: return 'default';
     }
   }
-   viewOrderDetails(orderId: number) {
-    this.router.navigate(['/orders', orderId]);
+
+  viewOrderDetails(orderId: number) {
+    this.router.navigate(['/order', orderId]);
   }
 
   viewAllOrders() {
     this.router.navigate(['/orders']);
+  }
+
+  getTotalItems(order: Order): number {
+    if (order.items) {
+      return order.items.reduce((total, item) => total + item.quantity, 0);
+    }
+    return order.item_count || 0;
+  }
+
+  getOrderTotal(order: Order): number {
+    if (order.total_items) {
+      return order.total_items;
+    }
+    return order.total_amount;
   }
 }

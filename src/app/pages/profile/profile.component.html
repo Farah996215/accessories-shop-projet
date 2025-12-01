@@ -63,16 +63,21 @@
           </mat-card-header>
           
           <mat-card-content>
-            <div *ngIf="recentOrders.length > 0; else noOrders" class="orders-list">
+            <div *ngIf="isLoading" class="loading-spinner">
+              <mat-spinner diameter="50"></mat-spinner>
+              <p>Loading your orders...</p>
+            </div>
+            
+            <div *ngIf="!isLoading && recentOrders.length > 0; else noOrders" class="orders-list">
               <div *ngFor="let order of recentOrders" class="order-item">
                 <div class="order-info">
                   <div class="order-header">
                     <h3>Order #{{ order.id }}</h3>
-                    <span class="order-date">{{ order.date }}</span>
+                    <span class="order-date">{{ order.created_at }}</span>
                   </div>
                   <div class="order-details">
-                    <span class="order-items">{{ order.items }} item(s)</span>
-                    <span class="order-total">{{ order.total }} TND</span>
+                    <span class="order-items">{{ getTotalItems(order) }} item(s)</span>
+                    <span class="order-total">{{ getOrderTotal(order) }} TND</span>
                   </div>
                 </div>
                 <div class="order-actions">
@@ -87,7 +92,7 @@
             </div>
             
             <ng-template #noOrders>
-              <div class="no-orders">
+              <div class="no-orders" *ngIf="!isLoading">
                 <mat-icon>shopping_bag</mat-icon>
                 <h3>No orders yet</h3>
                 <p>Start shopping to see your orders here</p>

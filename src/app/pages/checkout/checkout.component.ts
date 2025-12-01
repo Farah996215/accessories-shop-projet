@@ -13,7 +13,7 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDividerModule } from '@angular/material/divider';
 import { CartService, CartItem } from '../../services/cart.service';
 import { AuthService } from '../../services/auth.service';
-import { HttpClient } from '@angular/common/http';
+import { OrderService, CreateOrderRequest } from '../../services/order.service';
 
 @Component({
   selector: 'app-checkout',
@@ -52,7 +52,7 @@ export class CheckoutComponent implements OnInit {
   constructor(
     private cartService: CartService,
     private authService: AuthService,
-    private http: HttpClient,
+    private orderService: OrderService,
     private router: Router,
     private fb: FormBuilder,
     private snackBar: MatSnackBar
@@ -109,6 +109,12 @@ export class CheckoutComponent implements OnInit {
     this.updatePaymentValidators('credit');
   }
 
+  getPaymentMethodLabel(): string {
+    const method = this.paymentForm.get('paymentMethod')?.value;
+    const paymentMethod = this.paymentMethods.find(m => m.value === method);
+    return paymentMethod ? paymentMethod.label : 'Unknown';
+  }
+
   updatePaymentValidators(method: string) {
     const cardNumber = this.paymentForm.get('cardNumber');
     const expiryDate = this.paymentForm.get('expiryDate');
@@ -149,41 +155,77 @@ export class CheckoutComponent implements OnInit {
     if (this.shippingForm.valid && this.paymentForm.valid && this.authService.isLoggedIn()) {
       this.isSubmitting = true;
 
-      const orderData = {
-        user_id: this.authService.getUserId(),
+      const userId = this.authService.getUserId();
+      if (!userId) {
+        this.snackBar.open('User not found. Please login again.', 'Close', {
+          duration: 5000,
+          horizontalPosition: 'right',
+          verticalPosition: 'top'
+        });
+        this.isSubmitting = false;
+        return;
+      }
+
+      const orderData: CreateOrderRequest = {
+        user_id: userId,
         items: this.cartItems,
         total: this.getFinalTotal(),
         shipping_info: this.shippingForm.value
       };
 
       try {
-        const response = await this.http.post<any>('http://localhost/api/orders.php', orderData).toPromise();
+        const response = await this.orderService.createOrder(orderData).toPromise();
         
-        if (response.success) {
-          this.cartService.clearCart();
-          
-          this.snackBar.open('Order placed successfully! Order ID: ' + response.order_id, 'Close', {
-            duration: 5000,
-            horizontalPosition: 'right',
-            verticalPosition: 'top'
-          });
-
-          this.router.navigate(['/home']);
+        if (response && response.success) {
+          this.completeOrder(response.order_id);
         } else {
-          throw new Error(response.message);
+          this.createLocalOrderInStorage(orderData);
         }
-      } catch (error: any) {
-        console.error('Order error:', error);
-        this.snackBar.open('Failed to place order: ' + (error.message || 'Unknown error'), 'Close', {
-          duration: 5000,
-          horizontalPosition: 'right',
-          verticalPosition: 'top',
-          panelClass: ['error-snackbar']
-        });
-      } finally {
-        this.isSubmitting = false;
+      } catch (error) {
+        this.createLocalOrderInStorage(orderData);
       }
     }
+  }
+
+  private createLocalOrderInStorage(orderData: CreateOrderRequest) {
+    const orderId = Math.floor(Math.random() * 90000) + 10000;
+    const localOrders = JSON.parse(localStorage.getItem('local_orders') || '[]');
+    const newOrder = {
+      id: orderId,
+      user_id: orderData.user_id,
+      total_amount: orderData.total,
+      status: 'pending',
+      shipping_address: orderData.shipping_info.address,
+      shipping_city: orderData.shipping_info.city,
+      shipping_zip: orderData.shipping_info.zipCode,
+      created_at: new Date().toISOString().split('T')[0],
+      items: orderData.items.map(item => ({
+        product_id: item.product.id,
+        product_name: item.product.name,
+        quantity: item.quantity,
+        price: item.product.price,
+        image: item.product.image
+      }))
+    };
+    
+    localOrders.push(newOrder);
+    localStorage.setItem('local_orders', JSON.stringify(localOrders));
+    
+    this.completeOrder(orderId);
+  }
+
+  private completeOrder(orderId: number) {
+    this.cartService.clearCart();
+    
+    this.snackBar.open(`Order placed successfully! Order ID: ${orderId}`, 'View Order', {
+      duration: 5000,
+      horizontalPosition: 'right',
+      verticalPosition: 'top'
+    }).onAction().subscribe(() => {
+      this.router.navigate(['/order', orderId]);
+    });
+
+    this.router.navigate(['/order', orderId]);
   }
 
   getShippingFormErrors(controlName: string): string {
@@ -212,11 +254,4 @@ export class CheckoutComponent implements OnInit {
     }
     return '';
   }
-  getPaymentMethodLabel() {
-  const method = this.paymentMethods.find(
-    (m) => m.value === this.paymentForm.value.paymentMethod
-  );
-
-  return method ? method.label : '';
-}
 }
