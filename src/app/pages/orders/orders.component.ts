@@ -6,24 +6,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import { MatChipsModule } from '@angular/material/chips';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { AuthService } from '../../services/auth.service';
-
-export interface Order {
-  id: number;
-  date: string;
-  total: number;
-  status: string;
-  items: OrderItem[];
-  shippingAddress: string;
-}
-
-export interface OrderItem {
-  productId: number;
-  productName: string;
-  quantity: number;
-  price: number;
-  image: string;
-}
+import { OrderService, Order } from '../../services/order.service';
 
 @Component({
   selector: 'app-orders',
@@ -35,7 +20,8 @@ export interface OrderItem {
     MatButtonModule,
     MatIconModule,
     MatTableModule,
-    MatChipsModule
+    MatChipsModule,
+    MatProgressSpinnerModule
   ],
   templateUrl: './orders.component.html',
   styleUrls: ['./orders.component.scss']
@@ -43,9 +29,11 @@ export interface OrderItem {
 export class OrdersComponent implements OnInit {
   orders: Order[] = [];
   displayedColumns: string[] = ['id', 'date', 'items', 'total', 'status', 'actions'];
+  isLoading = true;
 
   constructor(
     private authService: AuthService,
+    private orderService: OrderService,
     private router: Router
   ) {}
 
@@ -59,70 +47,24 @@ export class OrdersComponent implements OnInit {
   }
 
   loadOrders() {
-    this.orders = [
-      {
-        id: 1001,
-        date: '2024-01-15',
-        total: 168.00,
-        status: 'delivered',
-        shippingAddress: '123 Main St, Tunis, 1001',
-        items: [
-          {
-            productId: 1,
-            productName: 'Silver Diamond Necklace',
-            quantity: 1,
-            price: 45.00,
-            image: 'assets/necklace.jpg'
-          },
-          {
-            productId: 2,
-            productName: 'Gold Plated Bracelet',
-            quantity: 1,
-            price: 75.00,
-            image: 'assets/bracelet.jpg'
-          },
-          {
-            productId: 3,
-            productName: 'Pearl Stud Earrings',
-            quantity: 1,
-            price: 35.00,
-            image: 'assets/earrings.jpg'
-          }
-        ]
+    const user = this.authService.getCurrentUser();
+    if (!user) return;
+    
+    this.isLoading = true;
+    
+    this.orderService.getUserOrders(user.id).subscribe({
+      next: (response) => {
+        if (response.success) {
+          this.orders = response.orders;
+        }
+        this.isLoading = false;
       },
-      {
-        id: 1002,
-        date: '2024-01-10',
-        total: 75.00,
-        status: 'shipped',
-        shippingAddress: '123 Main St, Tunis, 1001',
-        items: [
-          {
-            productId: 2,
-            productName: 'Gold Plated Bracelet',
-            quantity: 1,
-            price: 75.00,
-            image: 'assets/bracelet.jpg'
-          }
-        ]
-      },
-      {
-        id: 1003,
-        date: '2024-01-05',
-        total: 45.00,
-        status: 'pending',
-        shippingAddress: '123 Main St, Tunis, 1001',
-        items: [
-          {
-            productId: 1,
-            productName: 'Silver Diamond Necklace',
-            quantity: 1,
-            price: 45.00,
-            image: 'assets/necklace.jpg'
-          }
-        ]
+      error: (error) => {
+        console.error('Error loading orders:', error);
+        this.orders = [];
+        this.isLoading = false;
       }
-    ];
+    });
   }
 
   getStatusColor(status: string): string {
@@ -135,7 +77,7 @@ export class OrdersComponent implements OnInit {
   }
 
   viewOrderDetails(orderId: number) {
-    this.router.navigate(['/orders', orderId]);
+    this.router.navigate(['/order', orderId]);
   }
 
   getTotalItems(order: Order): number {

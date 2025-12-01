@@ -7,6 +7,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { FormsModule } from '@angular/forms';
 import { ProductService, Product } from '../../services/product.service';
 import { CartService } from '../../services/cart.service';
@@ -23,6 +24,7 @@ import { CartService } from '../../services/cart.service';
     MatFormFieldModule,
     MatInputModule,
     MatIconModule,
+    MatSnackBarModule,
     FormsModule
   ],
   templateUrl: './products.component.html',
@@ -41,7 +43,8 @@ export class ProductsComponent implements OnInit {
     private productService: ProductService,
     private cartService: CartService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private snackBar: MatSnackBar
   ) {}
 
   ngOnInit() {
@@ -337,5 +340,11 @@ export class ProductsComponent implements OnInit {
 
   addToCart(product: Product) {
     this.cartService.addToCart(product);
+    
+    this.snackBar.open('Added to cart!', 'Close', {
+      duration: 2000,
+      horizontalPosition: 'right',
+      verticalPosition: 'top'
+    });
   }
 }

@@ -8,7 +8,12 @@
     <div class="orders-content">
       <mat-card class="orders-card">
         <mat-card-content>
-          <div *ngIf="orders.length > 0; else noOrders">
+          <div *ngIf="isLoading" class="loading-spinner">
+            <mat-spinner diameter="50"></mat-spinner>
+            <p>Loading your orders...</p>
+          </div>
+          
+          <div *ngIf="!isLoading && orders.length > 0; else noOrders">
             <table mat-table [dataSource]="orders" class="orders-table">
               
               <ng-container matColumnDef="id">
@@ -21,7 +26,7 @@
               <ng-container matColumnDef="date">
                 <th mat-header-cell *matHeaderCellDef>Date</th>
                 <td mat-cell *matCellDef="let order" class="order-date">
-                  {{ order.date }}
+                  {{ order.created_at }}
                 </td>
               </ng-container>
 
@@ -30,8 +35,8 @@
                 <td mat-cell *matCellDef="let order" class="order-items">
                   <div class="items-preview">
                     <div *ngFor="let item of order.items.slice(0, 2)" class="item-preview">
-                      <img [src]="item.image" [alt]="item.productName">
-                      <span>{{ item.productName }}</span>
+                      <img [src]="item.image" [alt]="item.product_name">
+                      <span>{{ item.product_name }}</span>
                     </div>
                     <div *ngIf="order.items.length > 2" class="more-items">
                       +{{ order.items.length - 2 }} more
@@ -43,7 +48,7 @@
               <ng-container matColumnDef="total">
                 <th mat-header-cell *matHeaderCellDef>Total</th>
                 <td mat-cell *matCellDef="let order" class="order-total">
-                  {{ order.total }} TND
+                  {{ order.total_amount }} TND
                 </td>
               </ng-container>
 
@@ -71,7 +76,7 @@
           </div>
 
           <ng-template #noOrders>
-            <div class="no-orders">
+            <div class="no-orders" *ngIf="!isLoading">
               <mat-icon>shopping_bag</mat-icon>
               <h3>No orders yet</h3>
               <p>You haven't placed any orders yet. Start shopping to see your orders here.</p>

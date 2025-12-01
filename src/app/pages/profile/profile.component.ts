@@ -31,6 +31,7 @@ export class ProfileComponent implements OnInit {
   recentOrders: Order[] = [];
   completedOrdersCount = 0;
   isLoading = true;
+  errorMessage = '';
 
   constructor(
     private authService: AuthService,
@@ -39,9 +40,13 @@ export class ProfileComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    console.log('Profile component initialized');
+    
     this.user = this.authService.getCurrentUser();
+    console.log('Current user:', this.user);
     
     if (!this.user) {
+      console.log('No user found, redirecting to login');
       this.router.navigate(['/login']);
       return;
     }
@@ -53,22 +58,29 @@ export class ProfileComponent implements OnInit {
     if (!this.user) return;
     
     this.isLoading = true;
+    this.errorMessage = '';
+    
+    console.log('Loading orders for user ID:', this.user.id);
     
     this.orderService.getUserOrders(this.user.id).subscribe({
       next: (response) => {
+        console.log('Orders API response:', response);
+        
         if (response.success) {
-          this.recentOrders = response.orders.slice(0, 5); // Get only 5 recent orders
+          this.recentOrders = response.orders.slice(0, 5);
+          console.log('Orders loaded:', this.recentOrders);
         } else {
-          // If API fails, use mock data for demo
-          this.recentOrders = this.orderService.getMockOrders(this.user!.id);
+          this.errorMessage = response.message || 'Failed to load orders';
+          console.error('API error:', this.errorMessage);
+          this.recentOrders = [];
         }
         this.calculateCompletedOrders();
         this.isLoading = false;
       },
       error: (error) => {
         console.error('Error loading orders:', error);
-        // Use mock data as fallback
-        this.recentOrders = this.orderService.getMockOrders(this.user!.id);
+        this.errorMessage = 'Connection error. Please check your API server.';
+        this.recentOrders = [];
         this.calculateCompletedOrders();
         this.isLoading = false;
       }
