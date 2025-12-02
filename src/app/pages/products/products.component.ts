@@ -36,7 +36,7 @@ export class ProductsComponent implements OnInit {
   categories: string[] = ['all', 'necklaces', 'bracelets', 'earrings', 'watches', 'rings'];
   selectedCategory: string = 'all';
   searchQuery: string = '';
-  priceRange: number = 200;
+  priceRange: number = 1000;
   sortBy: string = 'name';
 
   constructor(
@@ -223,7 +223,7 @@ export class ProductsComponent implements OnInit {
         name: 'Digital Sports Watch',
         price: 110,
         description: 'Water-resistant digital sports watch with LED display',
-        image: 'pictures//digital_sport.jpeg',
+        image: 'pictures/digital_sport.jpeg',
         category: 'watches',
         inStock: true
       },
@@ -277,7 +277,7 @@ export class ProductsComponent implements OnInit {
         name: 'Silver Double Layer Chain',
         price: 95,
         description: 'Trendy double-layer silver chain',
-        image: 'pictures/double_chain.jpeg',
+        image: 'pictures/double_chain.png',
         category: 'necklaces',
         inStock: true
       },
