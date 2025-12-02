@@ -35,22 +35,30 @@
     <h2>Shop By Category</h2>
     <div class="categories-grid">
       <div class="category-card" routerLink="/products" [queryParams]="{category: 'necklaces'}">
-        <div class="category-image necklaces"></div>
+        <div class="category-icon">
+          <img src="pictures/chain.png" class="pictures-necklaces">
+        </div>
         <h3>Necklaces</h3>
         <p>Elegant pieces for every occasion</p>
       </div>
       <div class="category-card" routerLink="/products" [queryParams]="{category: 'bracelets'}">
-        <div class="category-image bracelets"></div>
+        <div class="category-icon">
+          <img src="pictures/braclet.png" class="pictures-bracelets">
+        </div>
         <h3>Bracelets</h3>
         <p>Stylish wrist accessories</p>
       </div>
       <div class="category-card" routerLink="/products" [queryParams]="{category: 'earrings'}">
-        <div class="category-image earrings"></div>
+        <div class="category-icon">
+          <img src="pictures/earrings.png" class="pictures-earrings">
+        </div>
         <h3>Earrings</h3>
         <p>From studs to statement pieces</p>
       </div>
       <div class="category-card" routerLink="/products" [queryParams]="{category: 'watches'}">
-        <div class="category-image watches"></div>
+        <div class="category-icon">
+          <img src="pictures/watch.png" class="pictures-watches">
+        </div>
         <h3>Watches</h3>
         <p>Timeless timepieces</p>
       </div>
