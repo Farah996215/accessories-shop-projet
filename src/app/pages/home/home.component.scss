@@ -1,111 +1,68 @@
-$colors: (
-  primary: #A26E60,
-  secondary: #C49081,
-  accent: #DDADA0,
-  light: #EECBBF,
-  background: #FFE8DE
-);
-@function color($name) {
-  @return map-get($colors, $name);
-}
-@mixin animate($name, $duration: 0.5s, $timing: ease, $delay: 0s) {
-  animation: $name $duration $timing $delay;
-  animation-fill-mode: both;
-}
+$color-primary: #A26E60;
+$color-secondary: #C49081;
+$color-tertiary: #DDADA0;
+$color-light: #EECBBF;
+$color-lightest: #FFE8DE;
 
-@mixin hover-lift {
-  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
-              box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  
-  &:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 20px 40px rgba(color(primary), 0.15);
-  }
-}
-
-@mixin soft-glow($color) {
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: radial-gradient(circle at 50% 0%, rgba($color, 0.2), transparent 70%);
-    opacity: 0;
-    transition: opacity 0.5s ease;
-    pointer-events: none;
-    z-index: 1;
-  }
-  
-  &:hover::before {
-    opacity: 1;
-  }
-}
-
-@keyframes float {
-  0%, 100% { 
-    transform: translateY(0) rotate(0deg); 
-  }
-  50% { 
-    transform: translateY(-15px) rotate(2deg); 
-  }
-}
+$transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+$transition-bounce: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 
 @keyframes fadeInUp {
   from {
     opacity: 0;
-    transform: translateY(30px) scale(0.95);
+    transform: translateY(30px);
   }
   to {
     opacity: 1;
-    transform: translateY(0) scale(1);
+    transform: translateY(0);
   }
 }
 
-@keyframes shimmer {
-  0% { background-position: -200% center; }
-  100% { background-position: 200% center; }
-}
-
-@keyframes pulse-glow {
-  0%, 100% { 
-    box-shadow: 0 0 20px rgba(color(accent), 0.3);
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
   }
-  50% { 
-    box-shadow: 0 0 40px rgba(color(accent), 0.6);
+  to {
+    opacity: 1;
+    transform: scale(1);
   }
 }
 
-@keyframes gradient-shift {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
 }
 
-:host {
-  display: block;
-  overflow-x: hidden;
+@keyframes shine {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
 }
 
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 20px;
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
 }
+
 .hero-section {
+  background: linear-gradient(135deg, $color-primary 0%, $color-secondary 50%, $color-tertiary 100%);
+  padding: 120px 0;
+  text-align: center;
   position: relative;
-  min-height: 85vh;
-  display: flex;
-  align-items: center;
-  background: linear-gradient(
-    135deg,
-    color(background) 0%,
-    color(light) 30%,
-    color(accent) 100%
-  );
   overflow: hidden;
-  
+
   &::before {
     content: '';
     position: absolute;
@@ -113,545 +70,483 @@ $colors: (
     left: 0;
     right: 0;
     bottom: 0;
-    background: 
-      radial-gradient(circle at 20% 80%, rgba(color(primary), 0.15) 0%, transparent 50%),
-      radial-gradient(circle at 80% 20%, rgba(color(secondary), 0.1) 0%, transparent 50%);
-    animation: gradient-shift 15s ease infinite;
-    background-size: 200% 200%;
+    background: radial-gradient(circle at 30% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+    animation: float 6s ease-in-out infinite;
   }
-  
+
   .container {
     position: relative;
-    z-index: 2;
-    text-align: center;
-    @include animate(fadeInUp, 1s, cubic-bezier(0.4, 0, 0.2, 1));
+    z-index: 1;
+    animation: fadeInUp 0.8s ease-out;
   }
-  
+
   h1 {
-    font-size: 4rem;
+    font-size: 56px;
     font-weight: 800;
-    margin-bottom: 1.5rem;
-    color: color(primary);
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
-    letter-spacing: -0.5px;
-    background: linear-gradient(
-      45deg,
-      color(primary) 30%,
-      color(secondary) 70%
-    );
-    background-size: 200% auto;
-    background-clip: text;
-    -webkit-background-clip: text;
-    color: transparent;
-    animation: shimmer 3s linear infinite;
-    
-    @media (max-width: 768px) {
-      font-size: 2.5rem;
-    }
+    color: $color-lightest;
+    margin-bottom: 24px;
+    letter-spacing: 1px;
+    text-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    animation: fadeInUp 0.8s ease-out 0.2s both;
   }
-  
+
   p {
-    font-size: 1.4rem;
-    color: color(primary);
-    opacity: 0.9;
-    margin-bottom: 3rem;
-    max-width: 600px;
-    margin-left: auto;
-    margin-right: auto;
-    line-height: 1.6;
-    
-    @media (max-width: 768px) {
-      font-size: 1.1rem;
-    }
+    font-size: 20px;
+    color: $color-lightest;
+    margin-bottom: 40px;
+    opacity: 0.95;
+    animation: fadeInUp 0.8s ease-out 0.4s both;
   }
-  
+
   button {
-    position: relative;
-    padding: 1rem 2.5rem;
-    font-size: 1.2rem;
+    padding: 16px 48px;
+    font-size: 18px;
     font-weight: 600;
-    border: none;
     border-radius: 50px;
-    background: linear-gradient(
-      45deg,
-      color(primary),
-      color(secondary)
-    );
-    color: white;
-    cursor: pointer;
+    background: $color-lightest;
+    color: $color-primary;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    transition: $transition-bounce;
+    animation: fadeInUp 0.8s ease-out 0.6s both;
     overflow: hidden;
-    @include hover-lift;
-    @include soft-glow(color(primary));
-    animation: pulse-glow 2s ease-in-out infinite;
-    
-    &::after {
+    position: relative;
+
+    &::before {
       content: '';
       position: absolute;
-      top: -2px;
-      left: -2px;
-      right: -2px;
-      bottom: -2px;
-      background: linear-gradient(
-        45deg,
-        color(primary),
-        color(secondary),
-        color(accent),
-        color(light)
-      );
-      border-radius: 52px;
-      z-index: -1;
-      opacity: 0;
-      transition: opacity 0.3s ease;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      transition: left 0.5s;
     }
-    
-    &:hover::after {
-      opacity: 1;
-    }
-    
+
     &:hover {
-      animation: none;
-      background-size: 200% auto;
-      background-position: right center;
+      transform: translateY(-4px) scale(1.05);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
+
+      &::before {
+        left: 100%;
+      }
     }
   }
 }
+
 .featured-section {
-  padding: 5rem 0;
-  background: linear-gradient(
-    to bottom,
-    rgba(color(background), 0.8) 0%,
-    white 100%
-  );
-  
+  padding: 80px 0;
+  background: linear-gradient(180deg, $color-lightest 0%, #ffffff 100%);
+
   h2 {
     text-align: center;
-    font-size: 2.5rem;
-    margin-bottom: 3rem;
-    color: color(primary);
+    font-size: 42px;
+    font-weight: 700;
+    color: $color-primary;
+    margin-bottom: 60px;
     position: relative;
-    display: inline-block;
-    left: 50%;
-    transform: translateX(-50%);
-    
+    animation: fadeInUp 0.6s ease-out;
+
     &::after {
       content: '';
       position: absolute;
-      bottom: -10px;
-      left: 0;
-      width: 100%;
-      height: 3px;
-      background: linear-gradient(
-        to right,
-        transparent,
-        color(accent),
-        transparent
-      );
+      bottom: -16px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 4px;
+      background: linear-gradient(90deg, $color-secondary, $color-tertiary);
       border-radius: 2px;
     }
   }
-  
+
   .products-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 2rem;
-    padding: 1rem;
-    
-    .product-card {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 32px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .product-card {
+    border-radius: 16px;
+    overflow: hidden;
+    transition: $transition-smooth;
+    background: white;
+    box-shadow: 0 4px 16px rgba($color-primary, 0.1);
+    animation: scaleIn 0.6s ease-out;
+    animation-fill-mode: both;
+
+    &:nth-child(1) { animation-delay: 0.1s; }
+    &:nth-child(2) { animation-delay: 0.2s; }
+    &:nth-child(3) { animation-delay: 0.3s; }
+    &:nth-child(4) { animation-delay: 0.4s; }
+
+    &:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 12px 32px rgba($color-primary, 0.2);
+
+      .product-image img {
+        transform: scale(1.1);
+      }
+
+      .product-badge {
+        transform: scale(1.1);
+      }
+    }
+
+    .product-image {
       position: relative;
-      border: none;
-      border-radius: 20px;
       overflow: hidden;
-      background: white;
-      @include hover-lift;
-      @include soft-glow(color(accent));
-      @include animate(fadeInUp, 0.6s, cubic-bezier(0.4, 0, 0.2, 1));
-      animation-delay: calc(var(--index, 0) * 0.1s);
-      
-      .product-image {
+      background: $color-lightest;
+      height: 300px;
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s ease;
+      }
+
+      .product-badge {
+        position: absolute;
+        top: 16px;
+        right: 16px;
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+        text-transform: uppercase;
+        backdrop-filter: blur(10px);
+        transition: $transition-bounce;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+        &.necklaces {
+          background: rgba($color-secondary, 0.9);
+          color: white;
+        }
+
+        &.bracelets {
+          background: rgba($color-tertiary, 0.9);
+          color: $color-primary;
+        }
+
+        &.earrings {
+          background: rgba($color-light, 0.9);
+          color: $color-primary;
+        }
+
+        &.watches {
+          background: rgba($color-primary, 0.9);
+          color: white;
+        }
+      }
+    }
+
+    mat-card-content {
+      padding: 24px;
+
+      h3 {
+        font-size: 22px;
+        font-weight: 700;
+        color: $color-primary;
+        margin-bottom: 12px;
+      }
+
+      .price {
+        font-size: 24px;
+        font-weight: 700;
+        color: $color-secondary;
+        margin-bottom: 12px;
+      }
+
+      .description {
+        color: #666;
+        line-height: 1.6;
+        font-size: 14px;
+      }
+    }
+
+    mat-card-actions {
+      padding: 0 24px 24px;
+
+      button {
+        width: 100%;
+        border-radius: 12px;
+        font-weight: 600;
+        background: linear-gradient(135deg, $color-primary, $color-secondary);
+        color: white;
+        transition: $transition-bounce;
         position: relative;
         overflow: hidden;
-        height: 250px;
-        
-        img {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-          transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        
-        &:hover img {
-          transform: scale(1.05);
-        }
-        
-        .product-badge {
+
+        &::before {
+          content: '';
           position: absolute;
-          top: 15px;
-          right: 15px;
-          padding: 0.5rem 1rem;
-          background: rgba(color(primary), 0.9);
-          color: white;
-          border-radius: 20px;
-          font-size: 0.8rem;
-          font-weight: 600;
-          text-transform: uppercase;
-          letter-spacing: 0.5px;
-          backdrop-filter: blur(10px);
-          border: 1px solid rgba(white, 0.2);
-          transition: all 0.3s ease;
-          
-          &:hover {
-            transform: scale(1.05);
-            background: color(primary);
-          }
-          
-          &.necklaces { background: rgba(#A26E60, 0.9); }
-          &.bracelets { background: rgba(#C49081, 0.9); }
-          &.earrings { background: rgba(#DDADA0, 0.9); }
-          &.watches { background: rgba(#EECBBF, 0.9); }
+          top: 50%;
+          left: 50%;
+          width: 0;
+          height: 0;
+          border-radius: 50%;
+          background: rgba(255, 255, 255, 0.2);
+          transform: translate(-50%, -50%);
+          transition: width 0.5s, height 0.5s;
         }
-      }
-      
-      mat-card-content {
-        padding: 1.5rem;
-        
-        h3 {
-          font-size: 1.3rem;
-          margin-bottom: 0.5rem;
-          color: color(primary);
-          font-weight: 700;
-        }
-        
-        .price {
-          font-size: 1.5rem;
-          font-weight: 800;
-          color: color(secondary);
-          margin-bottom: 0.5rem;
-        }
-        
-        .description {
-          color: #666;
-          font-size: 0.95rem;
-          line-height: 1.5;
-          margin-bottom: 0;
-        }
-      }
-      
-      mat-card-actions {
-        padding: 0 1.5rem 1.5rem;
-        
-        button {
-          width: 100%;
-          padding: 0.8rem;
-          background: linear-gradient(
-            to right,
-            color(light),
-            color(accent)
-          );
-          color: color(primary);
-          border: none;
-          border-radius: 10px;
-          font-weight: 600;
-          transition: all 0.3s ease;
-          
-          &:hover {
-            background: linear-gradient(
-              to right,
-              color(accent),
-              color(secondary)
-            );
-            color: white;
-            transform: translateY(-2px);
+
+        &:hover {
+          transform: scale(1.05);
+          box-shadow: 0 8px 24px rgba($color-primary, 0.3);
+
+          &::before {
+            width: 300px;
+            height: 300px;
           }
         }
       }
     }
   }
 }
+
 .categories-section {
-  padding: 5rem 0;
-  background: linear-gradient(
-    to bottom,
-    white 0%,
-    rgba(color(background), 0.5) 100%
-  );
-  
+  padding: 80px 0;
+  background: white;
+
   h2 {
     text-align: center;
-    font-size: 2.5rem;
-    margin-bottom: 3rem;
-    color: color(primary);
+    font-size: 42px;
+    font-weight: 700;
+    color: $color-primary;
+    margin-bottom: 60px;
     position: relative;
-    
-    &::before {
-      content: '✨';
-      position: absolute;
-      left: -50px;
-      animation: float 3s ease-in-out infinite;
-    }
-    
+    animation: fadeInUp 0.6s ease-out;
+
     &::after {
-      content: '✨';
+      content: '';
       position: absolute;
-      right: -50px;
-      animation: float 3s ease-in-out infinite reverse;
+      bottom: -16px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 4px;
+      background: linear-gradient(90deg, $color-secondary, $color-tertiary);
+      border-radius: 2px;
     }
   }
-  
+
   .categories-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 2rem;
-    padding: 1rem;
-    
-    .category-card {
-      position: relative;
-      border-radius: 20px;
-      overflow: hidden;
-      padding: 2rem;
-      background: white;
-      cursor: pointer;
-      @include hover-lift;
-      @include animate(fadeInUp, 0.6s, cubic-bezier(0.4, 0, 0.2, 1));
-      animation-delay: calc(var(--index, 0) * 0.1s);
-      
-      &::after {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: linear-gradient(
-          135deg,
-          transparent 30%,
-          rgba(color(light), 0.3) 100%
-        );
-        opacity: 0;
-        transition: opacity 0.3s ease;
-      }
-      
-      &:hover::after {
+    gap: 32px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .category-card {
+    cursor: pointer;
+    text-align: center;
+    padding: 32px;
+    border-radius: 20px;
+    background: linear-gradient(135deg, $color-lightest, $color-light);
+    transition: $transition-bounce;
+    animation: scaleIn 0.6s ease-out;
+    animation-fill-mode: both;
+    position: relative;
+    overflow: hidden;
+
+    &:nth-child(1) { animation-delay: 0.1s; }
+    &:nth-child(2) { animation-delay: 0.2s; }
+    &:nth-child(3) { animation-delay: 0.3s; }
+    &:nth-child(4) { animation-delay: 0.4s; }
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    &:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 16px 40px rgba($color-primary, 0.2);
+
+      &::before {
         opacity: 1;
       }
-      
+
       .category-image {
-        height: 180px;
-        border-radius: 15px;
-        margin-bottom: 1.5rem;
-        background: linear-gradient(
-          135deg,
-          color(light),
-          color(accent)
-        );
-        position: relative;
-        overflow: hidden;
-        
-        &::before {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          opacity: 0.8;
-        }
-        
-        &.necklaces::before {
-          background: linear-gradient(
-            45deg,
-            color(primary) 0%,
-            color(secondary) 100%
-          );
-        }
-        
-        &.bracelets::before {
-          background: linear-gradient(
-            45deg,
-            color(secondary) 0%,
-            color(accent) 100%
-          );
-        }
-        
-        &.earrings::before {
-          background: linear-gradient(
-            45deg,
-            color(accent) 0%,
-            color(light) 100%
-          );
-        }
-        
-        &.watches::before {
-          background: linear-gradient(
-            45deg,
-            color(light) 0%,
-            color(background) 100%
-          );
-        }
-        
-        &::after {
-          content: '→';
-          position: absolute;
-          top: 50%;
-          left: 50%;
-          transform: translate(-50%, -50%) scale(0);
-          font-size: 3rem;
-          color: white;
-          transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        
-        &:hover::after {
-          transform: translate(-50%, -50%) scale(1);
-        }
+        transform: scale(1.1) rotate(5deg);
       }
-      
+
       h3 {
-        font-size: 1.5rem;
-        color: color(primary);
-        margin-bottom: 0.5rem;
-        font-weight: 700;
+        color: $color-primary;
       }
-      
-      p {
-        color: #666;
-        font-size: 0.95rem;
-        line-height: 1.5;
+    }
+
+    .category-image {
+      width: 120px;
+      height: 120px;
+      margin: 0 auto 24px;
+      border-radius: 50%;
+      transition: $transition-bounce;
+      box-shadow: 0 8px 24px rgba($color-primary, 0.2);
+
+      &.necklaces {
+        background: linear-gradient(135deg, $color-secondary, $color-tertiary);
       }
+
+      &.bracelets {
+        background: linear-gradient(135deg, $color-tertiary, $color-light);
+      }
+
+      &.earrings {
+        background: linear-gradient(135deg, $color-light, $color-lightest);
+      }
+
+      &.watches {
+        background: linear-gradient(135deg, $color-primary, $color-secondary);
+      }
+    }
+
+    h3 {
+      font-size: 24px;
+      font-weight: 700;
+      color: $color-secondary;
+      margin-bottom: 12px;
+      transition: $transition-smooth;
+    }
+
+    p {
+      color: #666;
+      font-size: 14px;
+      line-height: 1.6;
     }
   }
 }
 
 .ai-section {
-  padding: 5rem 0;
-  background: linear-gradient(
-    135deg,
-    color(primary) 0%,
-    color(secondary) 100%
-  );
+  padding: 80px 0;
+  background: linear-gradient(135deg, $color-primary 0%, $color-secondary 100%);
   position: relative;
   overflow: hidden;
-  
+
   &::before {
     content: '';
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: 
-      url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23ffffff' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E");
-    opacity: 0.1;
-    animation: float 30s linear infinite;
+    top: -50%;
+    right: -50%;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+    animation: float 8s ease-in-out infinite;
   }
-  
+
   .ai-promo {
-    position: relative;
-    z-index: 2;
     text-align: center;
     max-width: 800px;
     margin: 0 auto;
-    padding: 3rem;
-    background: rgba(white, 0.95);
-    border-radius: 30px;
-    @include animate(fadeInUp, 0.8s, cubic-bezier(0.4, 0, 0.2, 1));
-    @include hover-lift;
-    
-    mat-icon {
-      font-size: 4rem;
-      width: 4rem;
-      height: 4rem;
-      margin-bottom: 1.5rem;
-      color: color(primary);
-      animation: float 3s ease-in-out infinite;
+    position: relative;
+    z-index: 1;
+    animation: scaleIn 0.8s ease-out;
+
+    mat-icon:first-child {
+      font-size: 80px;
+      width: 80px;
+      height: 80px;
+      color: $color-lightest;
+      margin-bottom: 24px;
+      animation: pulse 2s ease-in-out infinite;
     }
-    
+
     h2 {
-      font-size: 2.5rem;
-      color: color(primary);
-      margin-bottom: 1rem;
-      background: linear-gradient(
-        45deg,
-        color(primary),
-        color(secondary)
-      );
-      background-clip: text;
-      -webkit-background-clip: text;
-      color: transparent;
+      font-size: 42px;
+      font-weight: 700;
+      color: $color-lightest;
+      margin-bottom: 20px;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     }
-    
+
     p {
-      font-size: 1.2rem;
-      color: #666;
-      margin-bottom: 2rem;
-      line-height: 1.6;
+      font-size: 18px;
+      color: $color-lightest;
+      margin-bottom: 40px;
+      opacity: 0.95;
+      line-height: 1.8;
     }
-    
+
     button {
-      padding: 1rem 2.5rem;
-      font-size: 1.1rem;
+      padding: 16px 48px;
+      font-size: 18px;
       font-weight: 600;
-      background: linear-gradient(
-        45deg,
-        color(accent),
-        color(light)
-      );
-      color: color(primary);
-      border: none;
       border-radius: 50px;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      @include hover-lift;
-      @include soft-glow(color(accent));
-      
-      &:hover {
-        background: linear-gradient(
-          45deg,
-          color(light),
-          white
-        );
-      }
-      
+      background: $color-lightest;
+      color: $color-primary;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+      transition: $transition-bounce;
+
       mat-icon {
-        font-size: 1.5rem;
-        width: 1.5rem;
-        height: 1.5rem;
-        margin: 0;
-        animation: none;
+        margin-right: 8px;
+      }
+
+      &:hover {
+        transform: translateY(-4px) scale(1.05);
+        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
+        animation: pulse 0.6s ease;
       }
     }
   }
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 24px;
 }
 
 @media (max-width: 768px) {
-  .hero-section h1 {
-    font-size: 2.5rem;
-  }
-  
-  .hero-section p {
-    font-size: 1.1rem;
-  }
-  
-  .featured-section h2,
-  .categories-section h2,
-  .ai-section .ai-promo h2 {
-    font-size: 2rem;
-  }
-  
-  .categories-section h2 {
-    &::before,
-    &::after {
-      display: none;
+  .hero-section {
+    padding: 80px 0;
+
+    h1 {
+      font-size: 36px;
+    }
+
+    p {
+      font-size: 16px;
+    }
+
+    button {
+      padding: 12px 32px;
+      font-size: 16px;
     }
   }
-  
-  .ai-section .ai-promo {
-    padding: 2rem 1rem;
+
+  .featured-section,
+  .categories-section,
+  .ai-section {
+    padding: 60px 0;
+
+    h2 {
+      font-size: 32px;
+    }
+  }
+
+  .products-grid,
+  .categories-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .ai-promo {
+    h2 {
+      font-size: 32px;
+    }
+
+    p {
+      font-size: 16px;
+    }
   }
 }
-
-
-.delay-1 { animation-delay: 0.1s !important; }
-.delay-2 { animation-delay: 0.2s !important; }
-.delay-3 { animation-delay: 0.3s !important; }
-.delay-4 { animation-delay: 0.4s !important; }
