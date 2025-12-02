@@ -1,0 +1,438 @@
+$primary: #A26E60;
+$primary-light: #C49081;
+$primary-lighter: #DDADA0;
+$accent: #EECBBF;
+$background: #FFE8DE;
+
+@mixin smooth-transition($properties: all, $duration: 0.3s) {
+  transition: $properties $duration cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@mixin hover-glow {
+  @include smooth-transition;
+  &:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.1);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+.footer {
+  background: linear-gradient(135deg, darken($primary, 8%) 0%, $primary 50%, darken($primary-light, 5%) 100%);
+  padding-top: 1.5rem;
+  margin-top: 1.5rem;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, $accent, $primary-lighter, $accent);
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: -50px;
+    right: -50px;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba($accent, 0.1), transparent 70%);
+    border-radius: 50%;
+    animation: float 8s ease-in-out infinite;
+  }
+
+  .footer-content {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem 3rem;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 2.5rem;
+    position: relative;
+    z-index: 1;
+
+    @media (max-width: 1200px) {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    @media (max-width: 768px) {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2rem;
+      padding: 0 1.5rem 2rem;
+    }
+
+    @media (max-width: 480px) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .footer-section {
+    animation: fadeInUp 0.6s ease-out both;
+
+    @for $i from 1 through 5 {
+      &:nth-child(#{$i}) {
+        animation-delay: #{$i * 0.1}s;
+      }
+    }
+
+    h3 {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+      color: $background;
+      position: relative;
+      padding-bottom: 0.75rem;
+
+      &::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 40px;
+        height: 3px;
+        background: linear-gradient(90deg, $accent, transparent);
+        border-radius: 2px;
+      }
+    }
+
+    p {
+      line-height: 1.6;
+      color: lighten($primary-lighter, 15%);
+      margin-bottom: 1rem;
+    }
+  }
+
+  .footer-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: white;
+
+    mat-icon {
+      font-size: 32px;
+      width: 32px;
+      height: 32px;
+      color: $accent;
+      animation: pulse 3s ease-in-out infinite;
+    }
+  }
+
+  .footer-description {
+    font-size: 0.95rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .social-links {
+    display: flex;
+    gap: 1rem;
+
+    .social-link {
+      width: 42px;
+      height: 42px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(white, 0.1);
+      border-radius: 50%;
+      color: white;
+      backdrop-filter: blur(10px);
+      border: 2px solid rgba($accent, 0.3);
+      @include smooth-transition;
+
+      &:hover {
+        background: linear-gradient(135deg, $accent, $primary-lighter);
+        color: $primary;
+        transform: translateY(-5px) rotate(5deg);
+        box-shadow: 0 8px 20px rgba($accent, 0.3);
+        border-color: $accent;
+      }
+
+      mat-icon {
+        font-size: 20px;
+        width: 20px;
+        height: 20px;
+      }
+    }
+  }
+
+  .footer-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    li {
+      margin-bottom: 0.75rem;
+
+      a {
+        color: lighten($primary-lighter, 15%);
+        text-decoration: none;
+        font-size: 0.95rem;
+        display: inline-block;
+        position: relative;
+        @include smooth-transition;
+
+        &::before {
+          content: '';
+          position: absolute;
+          left: 0;
+          bottom: -2px;
+          width: 0;
+          height: 2px;
+          background: linear-gradient(90deg, $accent, $primary-lighter);
+          @include smooth-transition;
+        }
+
+        &:hover {
+          color: $background;
+          transform: translateX(5px);
+
+          &::before {
+            width: 100%;
+          }
+        }
+      }
+    }
+  }
+
+  .contact-info {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+      color: lighten($primary-lighter, 15%);
+      font-size: 0.95rem;
+      line-height: 1.6;
+      @include smooth-transition;
+
+      &:hover {
+        color: $background;
+        transform: translateX(3px);
+
+        mat-icon {
+          color: $accent;
+          transform: scale(1.1);
+        }
+      }
+
+      mat-icon {
+        font-size: 20px;
+        width: 20px;
+        height: 20px;
+        color: $primary-lighter;
+        flex-shrink: 0;
+        margin-top: 2px;
+        @include smooth-transition;
+      }
+
+      span {
+        flex: 1;
+      }
+    }
+  }
+
+  .newsletter-form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-top: 1rem;
+
+    .newsletter-input {
+      width: 100%;
+      padding: 0.875rem 1rem;
+      border: 2px solid rgba($accent, 0.3);
+      border-radius: 12px;
+      background: rgba(white, 0.1);
+      backdrop-filter: blur(10px);
+      color: white;
+      font-size: 0.95rem;
+      @include smooth-transition;
+
+      &::placeholder {
+        color: rgba(white, 0.6);
+      }
+
+      &:focus {
+        outline: none;
+        border-color: $accent;
+        background: rgba(white, 0.15);
+        box-shadow: 0 0 0 4px rgba($accent, 0.1);
+      }
+    }
+
+    .subscribe-btn {
+      width: 100%;
+      padding: 0.875rem 1.5rem;
+      background: linear-gradient(135deg, $accent, $primary-lighter);
+      color: $primary;
+      font-weight: 600;
+      border-radius: 12px;
+      @include smooth-transition;
+
+      &:hover {
+        background: linear-gradient(135deg, lighten($accent, 5%), $accent);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba($accent, 0.4);
+      }
+
+      ::ng-deep .mat-button-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+      }
+
+      mat-icon {
+        font-size: 18px;
+        width: 18px;
+        height: 18px;
+      }
+    }
+  }
+
+  .footer-bottom {
+    background: rgba(black, 0.2);
+    backdrop-filter: blur(10px);
+    border-top: 1px solid rgba($accent, 0.2);
+    padding: 1.5rem 0;
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 2rem;
+
+      @media (max-width: 768px) {
+        padding: 0 1.5rem;
+      }
+    }
+
+    .footer-bottom-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+
+      @media (max-width: 768px) {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      p {
+        color: lighten($primary-lighter, 15%);
+        font-size: 0.9rem;
+        margin: 0;
+      }
+    }
+
+    .footer-bottom-links {
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+
+      @media (max-width: 768px) {
+        justify-content: center;
+      }
+
+      a {
+        color: lighten($primary-lighter, 15%);
+        text-decoration: none;
+        font-size: 0.9rem;
+        position: relative;
+        @include smooth-transition;
+
+        &::after {
+          content: '';
+          position: absolute;
+          left: 50%;
+          bottom: -3px;
+          width: 0;
+          height: 2px;
+          background: linear-gradient(90deg, $accent, $primary-lighter);
+          transform: translateX(-50%);
+          @include smooth-transition;
+        }
+
+        &:hover {
+          color: $background;
+
+          &::after {
+            width: 100%;
+          }
+        }
+      }
+    }
+  }
+
+  @media (max-width: 480px) {
+    padding-top: 3rem;
+    margin-top: 3rem;
+
+    .footer-content {
+      gap: 2rem;
+    }
+
+    .footer-section h3 {
+      font-size: 1.1rem;
+    }
+
+    .social-links .social-link {
+      width: 38px;
+      height: 38px;
+
+      mat-icon {
+        font-size: 18px;
+        width: 18px;
+        height: 18px;
+      }
+    }
+
+    .newsletter-form {
+      .newsletter-input,
+      .subscribe-btn {
+        padding: 0.75rem 1rem;
+        font-size: 0.9rem;
+      }
+    }
+  }
+}
