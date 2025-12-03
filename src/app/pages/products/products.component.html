@@ -5,6 +5,15 @@
       <p>Discover our carefully curated selection of accessories</p>
     </div>
 
+    <div class="photo-gallery">
+      <div *ngFor="let photo of accessoryPhotos" class="photo-card">
+        <img [src]="photo.src.medium" [alt]="photo.alt">
+        <div class="photo-info">
+          <p>Photo by {{ photo.photographer }}</p>
+        </div>
+      </div>
+    </div>
+
     <div class="filters-section">
       <div class="filter-group">
         <mat-form-field appearance="outline">

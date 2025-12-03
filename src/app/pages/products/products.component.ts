@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { PexelsService } from '../../services/pexels.service';
 import { Router, ActivatedRoute, RouterLink } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -11,6 +12,16 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { FormsModule } from '@angular/forms';
 import { ProductService, Product } from '../../services/product.service';
 import { CartService } from '../../services/cart.service';
+
+interface Photo {
+  id : number;
+  src : {
+    medium: string;
+    large: string;
+  };
+  photographer: string;
+  alt: string;
+}
 
 @Component({
   selector: 'app-products',
@@ -31,6 +42,9 @@ import { CartService } from '../../services/cart.service';
   styleUrls: ['./products.component.scss']
 })
 export class ProductsComponent implements OnInit {
+
+  accessoryPhotos: Photo[] = [];
+
   products: Product[] = [];
   filteredProducts: Product[] = [];
   categories: string[] = ['all', 'necklaces', 'bracelets', 'earrings', 'watches', 'rings'];
@@ -44,13 +58,26 @@ export class ProductsComponent implements OnInit {
     private cartService: CartService,
     private route: ActivatedRoute,
     private router: Router,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private pexelsService: PexelsService
   ) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
       this.selectedCategory = params['category'] || 'all';
       this.loadProducts();
+    });
+    this.loadAccessoryPhotos();
+  }
+  loadAccessoryPhotos(): void {
+    this.pexelsService.searchPhotos('silver necklace macro').subscribe({
+      next: (response) => {
+        this.accessoryPhotos = response.photos;
+        console.log('Photos loaded:', this.accessoryPhotos);
+      },
+      error: (err) => {
+        console.error('Failed to load photos from Pexels', err);
+      }
     });
   }
 
