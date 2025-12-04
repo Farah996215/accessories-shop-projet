@@ -67,20 +67,11 @@ export class ContactComponent {
         
         const mockProducts: Product[] = [
           {
-            id: 1,
-            name: 'Silver Diamond Necklace',
-            price: 45,
-            description: 'Elegant silver necklace with diamond pendant',
-            image: 'assets/necklace.jpg',
-            category: 'necklaces',
-            inStock: true
-          },
-          {
             id: 5,
             name: 'Silver Chain Necklace',
             price: 28,
             description: 'Simple and elegant silver chain necklace',
-            image: 'assets/necklace2.jpg',
+            image: 'pictures/simple chain.jpeg',
             category: 'necklaces',
             inStock: true
           },
